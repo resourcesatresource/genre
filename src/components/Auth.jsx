@@ -70,6 +70,7 @@ function Auth() {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             className="form-control"
+            required
           />
         </div>
         <div className="form-row mb-3">
@@ -83,6 +84,7 @@ function Auth() {
             onChange={(e) => setpassword(e.target.value)}
             value={password}
             className="form-control"
+            required
           />
         </div>
         <div className="form-row">

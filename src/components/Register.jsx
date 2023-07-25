@@ -1,10 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 function Auth() {
   const [name, setname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +20,14 @@ function Auth() {
           password,
         }
       );
+      console.log(response);
+      if (response.data === "User already exist with this email") {
+        toast.warn("User already exist with this email", {
+          autoClose: 1500,
+        });
+        return;
+      }
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -43,6 +54,7 @@ function Auth() {
             id="name"
             onChange={(e) => setname(e.target.value)}
             className="form-control"
+            required
           />
         </div>
         <div className="form-row mb-4">
@@ -55,6 +67,7 @@ function Auth() {
             id="email"
             onChange={(e) => setEmail(e.target.value)}
             className="form-control"
+            required
           />
         </div>
         <div className="form-row mb-4">
@@ -67,6 +80,7 @@ function Auth() {
             id="password"
             onChange={(e) => setpassword(e.target.value)}
             className="form-control"
+            required
           />
         </div>
         <div className="form-row">

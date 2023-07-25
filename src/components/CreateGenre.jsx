@@ -67,6 +67,7 @@ function CreateGenre() {
             onChange={(e) => setName(e.target.value)}
             value={name}
             className="form-control"
+            required
           />
         </div>
         <div className="form-row">

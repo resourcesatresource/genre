@@ -38,7 +38,7 @@ function MoviesGenres() {
           setCnt((cnt) => cnt + 1);
           return;
         }
-        return res;
+        return res.json();
       })
       .then((res) => {
         toast.warn(`${res.name} deleted`, {
