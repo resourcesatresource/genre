@@ -48,7 +48,7 @@ function NavBar() {
         {/* <hr className="border border-secondary border opacity-25"></hr> */}
       </nav>
       {username ? (
-        <section className="container text-success">{`Hello, ${username}`}</section>
+        <section className="container text-primary">{`Hello, ${username}`}</section>
       ) : (
         ""
       )}
