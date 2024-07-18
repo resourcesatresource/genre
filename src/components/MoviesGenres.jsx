@@ -1,28 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { useGet } from "../hooks/use-https";
+
 function MoviesGenres() {
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
   const [cnt, setCnt] = useState(0);
   const [cookies, _] = useCookies("token");
+  const { data, error } = useGet("/genres", { sendAuthToken: false });
+
   useEffect(() => {
-    function fetchGenres() {
-      fetch("https://node-api-3m9u.onrender.com/api/genres", {
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setGenres(res);
-        })
-        .catch((err) => {
-          console.log("Some error happened", err);
-        });
+    if (data) {
+      setGenres(data);
     }
-    fetchGenres();
-  });
+  }, [data]);
 
   function handleDelete(id) {
     console.log("Delete", id);
@@ -51,6 +43,7 @@ function MoviesGenres() {
     <div className="container mt-5 mb-5">
       <h1>MoviesGenres:</h1>
       <p>Let's collaborate on creating list of movie genre</p>
+      {error && <p className="text-center text-danger">{error}</p>}
       {message ? (
         <p className="text-center text-danger">
           {cnt} {message}
