@@ -15,14 +15,14 @@ export const useGet = (
   const [error, setError] = useState(null);
   const [cookies] = useCookies(["token"]);
 
-  const execute = useCallback(async () => {
+  const execute = useCallback(async (pathOnExecution) => {
     setLoading(true);
     setError("");
     try {
       if (options.sendAuthToken && !cookies.token) {
         return;
       }
-      const response = await api.get(path, {
+      const response = await api.get(pathOnExecution ?? path, {
         headers: {
           ...(options.sendAuthToken && { "x-auth-token": cookies.token }),
         },
