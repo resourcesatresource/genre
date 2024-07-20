@@ -7,7 +7,7 @@ function MoviesGenres() {
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
   const [cnt, setCnt] = useState(0);
-  const [cookies, _] = useCookies("token");
+  const [cookies, _] = useCookies(["token", "isAdmin"]);
   const { data, error } = useGet("/genres", { sendAuthToken: false });
 
   useEffect(() => {
@@ -63,7 +63,7 @@ function MoviesGenres() {
           <li className="list-group-item flex-fill d-flex align-items-center justify-content-center text-center">
             <strong>{genre.name}</strong>
           </li>
-          {cookies.token ? (
+          {cookies.token && cookies.isAdmin === "true" ? (
             <li className="list-group-item">
               <button
                 onClick={() => handleDelete(genre._id)}

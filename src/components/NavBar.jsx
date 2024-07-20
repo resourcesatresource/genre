@@ -1,18 +1,61 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logout from "./Logout";
 import { useCookies } from "react-cookie";
 import { useGet } from "../hooks/use-https";
 import { GET_ADMIN_STATUS } from "../constants/api-endpoints";
+import TABS from "../constants/navigation";
+
+const UserGreeting = ({ userEmailId = "", isAdmin }) => {
+  return (
+    <>
+      {userEmailId && (
+        <section className="container text-primary-emphasis fw-medium">
+          {`Hello, ${userEmailId}`}
+          {isAdmin ? (
+            <span className="ms-2 btn btn-info btn-sm text-white fw-bold">
+              Admin
+            </span>
+          ) : (
+            <span className="ms-2 btn btn-secondary btn-sm text-white fw-bold">
+              User
+            </span>
+          )}
+        </section>
+      )}
+    </>
+  );
+};
+
+const NavTab = ({ title, target, activeTab }) => {
+  return (
+    <Link
+      to={target}
+      className={`col mx-2 text-center text-decoration-none btn ${
+        activeTab === target ? "btn-success" : ""
+      }`}
+    >
+      {title}
+    </Link>
+  );
+};
 
 function NavBar() {
-  const [cookies, _] = useCookies(["token", "user"]);
+  const { pathname } = useLocation();
+  const [cookies, setCookies] = useCookies(["token", "user", "isAdmin"]);
   const [username, setUsername] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [activeTab, setActiveTab] = useState(pathname);
+
   const { execute, data } = useGet(GET_ADMIN_STATUS, {
     lazy: true,
     sendAuthToken: true,
   });
+
+  useEffect(() => {
+    if (pathname) {
+      setActiveTab(pathname);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (cookies.user) {
@@ -24,11 +67,12 @@ function NavBar() {
     if (cookies.user) {
       setUsername(cookies.user);
     }
-  });
+  }, [cookies.user]);
 
   useEffect(() => {
     if (data?.isAdmin) {
-      setIsAdmin(true);
+      setCookies("isAdmin", true);
+      return;
     }
   }, [data]);
 
@@ -36,50 +80,32 @@ function NavBar() {
     <>
       <nav className="container mt-2 mb-2">
         <div className="row">
-          <Link to={"/"} className="col text-center text-decoration-none btn">
-            Home
-          </Link>
-          <Link
-            to={"/create"}
-            className="col text-center text-decoration-none btn"
-          >
-            Add
-          </Link>
+          <NavTab title="Home" target={TABS.HOME} activeTab={activeTab} />
           {cookies.token ? (
-            ""
+            <>
+              <NavTab
+                title="Add"
+                target={TABS.ADD_GENRE}
+                activeTab={activeTab}
+              />
+              <Logout />
+            </>
           ) : (
-            <Link
-              to={"/login"}
-              className="col text-center text-decoration-none btn"
-            >
-              Login
-            </Link>
+            <>
+              <NavTab title="Login" target={TABS.LOGIN} activeTab={activeTab} />
+              <NavTab
+                title="Register"
+                target={TABS.REGISTER}
+                activeTab={activeTab}
+              />
+            </>
           )}
-          {cookies.token ? (
-            ""
-          ) : (
-            <Link
-              to={"/register"}
-              className="col text-center text-decoration-none btn"
-            >
-              Register
-            </Link>
-          )}
-          {cookies.token ? <Logout /> : ""}
         </div>
         <hr className="border border-secondary border opacity-25"></hr>
       </nav>
-      {username ? (
-        <section className="container text-primary-emphasis fw-medium">
-          {`Hello, ${username}`}
-          {isAdmin && (
-            <span className="ms-2 btn btn-info btn-sm text-white fw-bold">
-              Admin
-            </span>
-          )}
-        </section>
-      ) : (
-        ""
+
+      {cookies.token && (
+        <UserGreeting userEmailId={username} isAdmin={cookies?.isAdmin} />
       )}
     </>
   );

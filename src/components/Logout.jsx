@@ -9,6 +9,7 @@ function Logout() {
   function handleLogout() {
     setCookies("token", "");
     setCookies("user", "");
+    setCookies("isAdmin", "");
     navigate("/");
     toast.error("Logged out...", {
       autoClose: 1500,
@@ -18,7 +19,7 @@ function Logout() {
     }, 2500);
   }
   return (
-    <div onClick={handleLogout} className="col btn btn-danger">
+    <div onClick={handleLogout} className="col mx-2 btn btn-danger">
       Logout
     </div>
   );
