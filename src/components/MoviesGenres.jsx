@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { useGet } from "../hooks/use-https";
+import FeatureAccess from "../ui/feature-access";
+import { ROLES } from "../constants";
+import configs from "../configs";
 
 function MoviesGenres() {
   const [genres, setGenres] = useState([]);
@@ -12,6 +15,7 @@ function MoviesGenres() {
 
   useEffect(() => {
     if (data) {
+      console.log("Configuration: ", configs.API_BASE_URL);
       setGenres(data);
     }
   }, [data]);
@@ -63,7 +67,8 @@ function MoviesGenres() {
           <li className="list-group-item flex-fill d-flex align-items-center justify-content-center text-center">
             <strong>{genre.name}</strong>
           </li>
-          {cookies.token && cookies.isAdmin === "true" ? (
+
+          <FeatureAccess allowed={ROLES.ADMIN}>
             <li className="list-group-item">
               <button
                 onClick={() => handleDelete(genre._id)}
@@ -72,11 +77,10 @@ function MoviesGenres() {
                 Delete
               </button>
             </li>
-          ) : (
-            ""
-          )}
+          </FeatureAccess>
         </ul>
       ))}
+      <FeatureAccess />
     </div>
   );
 }
