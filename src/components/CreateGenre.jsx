@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import lodash from "lodash";
+import configs from "../configs";
 
 function CreateGenre() {
   const [name, setName] = useState("");
@@ -23,7 +24,7 @@ function CreateGenre() {
     let genreName = lodash.capitalize(name);
     try {
       const response = await axios.post(
-        "https://node-api-3m9u.onrender.com/api/genres",
+        `${configs.API_BASE_URL}/genres`,
         {
           name: genreName,
         },

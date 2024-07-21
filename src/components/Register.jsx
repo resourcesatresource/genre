@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import configs from "../configs";
 function Auth() {
   const [name, setname] = useState("");
   const [email, setEmail] = useState("");
@@ -12,14 +13,11 @@ function Auth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://node-api-3m9u.onrender.com/api/users",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${configs.API_BASE_URL}/users`, {
+        name,
+        email,
+        password,
+      });
       console.log(response);
       if (response.data === "User already exist with this email") {
         toast.warn("User already exist with this email", {

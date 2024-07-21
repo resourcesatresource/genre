@@ -5,24 +5,23 @@ import { useGet } from "../hooks/use-https";
 import FeatureAccess from "../ui/feature-access";
 import { ROLES } from "../constants";
 import configs from "../configs";
+import Loader from "../ui/loader";
 
 function MoviesGenres() {
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
   const [cnt, setCnt] = useState(0);
   const [cookies, _] = useCookies(["token", "isAdmin"]);
-  const { data, error } = useGet("/genres", { sendAuthToken: false });
+  const { data, error, loading } = useGet("/genres", { sendAuthToken: false });
 
   useEffect(() => {
     if (data) {
-      console.log("Configuration: ", configs.API_BASE_URL);
       setGenres(data);
     }
   }, [data]);
 
   function handleDelete(id) {
-    console.log("Delete", id);
-    fetch(`https://node-api-3m9u.onrender.com/api/genres/${id}`, {
+    fetch(`${configs.API_BASE_URL}/genres/${id}`, {
       method: "DELETE",
       headers: {
         "x-auth-token": cookies.token,
@@ -40,8 +39,16 @@ function MoviesGenres() {
         toast.warn(`${res.name} deleted`, {
           autoClose: 1500,
         });
+        setTimeout(() => {
+          location.reload();
+        }, 2500);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error("Something went wrong!", {
+          autoClose: 1500,
+        });
+        console.log(err);
+      });
   }
   return (
     <div className="container mt-2 mb-5">
@@ -55,6 +62,7 @@ function MoviesGenres() {
       ) : (
         ""
       )}
+      {loading && <Loader />}
       {genres.map((genre) => (
         <ul
           key={genre._id}

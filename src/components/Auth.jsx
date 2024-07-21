@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import configs from "../configs";
 function Auth() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -14,13 +15,10 @@ function Auth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://node-api-3m9u.onrender.com/api/auth",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${configs.API_BASE_URL}/auth`, {
+        email,
+        password,
+      });
       // if credentials are invalid return with a message
       if (response.data === "Invalid Password or User") {
         console.log("Invalid Credentials");
@@ -39,9 +37,6 @@ function Auth() {
       toast.success(`Welcome, ${email}`, {
         autoClose: 2500,
       });
-      // setTimeout(() => {
-      //   location.reload();
-      // }, 3000);
     } catch (error) {
       console.log(error);
       setMessage("Sorry, try after sometime");

@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useState, useEffect, useCallback, lazy } from "react";
+import configs from "../configs";
 
 const api = axios.create({
-  baseURL: "https://node-api-3m9u.onrender.com/api",
+  baseURL: configs.API_BASE_URL,
 });
 
 export const useGet = (
