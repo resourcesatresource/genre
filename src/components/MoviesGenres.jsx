@@ -6,12 +6,14 @@ import FeatureAccess from "../ui/feature-access";
 import { ROLES } from "../constants";
 import configs from "../configs";
 import Loader from "../ui/loader";
+import { useAuthContext } from "../store";
 
 function MoviesGenres() {
+  const { authToken } = useAuthContext();
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
   const [cnt, setCnt] = useState(0);
-  const [cookies, _] = useCookies(["token", "isAdmin"]);
+
   const { data, error, loading } = useGet("/genres", { sendAuthToken: false });
 
   useEffect(() => {
@@ -24,7 +26,7 @@ function MoviesGenres() {
     fetch(`${configs.API_BASE_URL}/genres/${id}`, {
       method: "DELETE",
       headers: {
-        "x-auth-token": cookies.token,
+        "x-auth-token": authToken,
       },
     })
       .then((res) => {

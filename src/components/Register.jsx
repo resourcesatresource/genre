@@ -5,14 +5,16 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import configs from "../configs";
 function Auth() {
-  const [name, setname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setpassword] = useState("");
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsDisabled(true);
       const response = await axios.post(`${configs.API_BASE_URL}/users`, {
         name,
         email,
@@ -23,10 +25,13 @@ function Auth() {
         toast.warn("User already exist with this email", {
           autoClose: 1500,
         });
+        setIsDisabled(false);
         return;
       }
+      setIsDisabled(false);
       navigate("/login");
     } catch (error) {
+      setIsDisabled(false);
       console.log(error);
     }
   };
@@ -50,7 +55,7 @@ function Auth() {
             type="text"
             name="name"
             id="name"
-            onChange={(e) => setname(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             className="form-control"
             required
           />
@@ -76,13 +81,23 @@ function Auth() {
             type="password"
             name="password"
             id="password"
-            onChange={(e) => setpassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             className="form-control"
             required
           />
         </div>
         <div className="form-row">
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isDisabled}
+          >
+            {isDisabled && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
             Submit
           </button>
         </div>

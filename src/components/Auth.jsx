@@ -8,13 +8,15 @@ import configs from "../configs";
 function Auth() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
   const [_, setCookies] = useCookies(["token", "user"]);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsDisabled(true);
       const response = await axios.post(`${configs.API_BASE_URL}/auth`, {
         email,
         password,
@@ -37,7 +39,9 @@ function Auth() {
       toast.success(`Welcome, ${email}`, {
         autoClose: 2500,
       });
+      setIsDisabled(false);
     } catch (error) {
+      setIsDisabled(false);
       console.log(error);
       setMessage("Sorry, try after sometime");
     }
@@ -76,14 +80,24 @@ function Auth() {
             type="password"
             name="password"
             id="password"
-            onChange={(e) => setpassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             value={password}
             className="form-control"
             required
           />
         </div>
         <div className="form-row">
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isDisabled}
+          >
+            {isDisabled && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
             Submit
           </button>
         </div>

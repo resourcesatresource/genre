@@ -7,6 +7,8 @@ import Auth from "./components/Auth";
 import NavBar from "./components/NavBar";
 import { ToastContainer } from "react-toastify";
 import Footer from "./components/Footer";
+import ProtectedRoutes from "./navigation/protected-routes";
+import Profile from "./pages/profile";
 
 function App() {
   return (
@@ -18,6 +20,9 @@ function App() {
           <Route path="/login" element={<Auth />} />
           <Route path="/register" element={<Register />} />
           <Route path="/create" element={<CreateGenre />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/me" element={<Profile />} />
+          </Route>
         </Routes>
       </BrowserRouter>
       <Footer />

@@ -1,20 +1,21 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useCookies } from "react-cookie";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import lodash from "lodash";
+
 import configs from "../configs";
+import { useAuthContext } from "../store";
 
 function CreateGenre() {
   const [name, setName] = useState("");
-  const [cookies, _] = useCookies("token");
+  const { isAuthenticated, authToken } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!cookies.token) {
+    if (!isAuthenticated) {
       navigate("/login");
     }
   });
@@ -30,7 +31,7 @@ function CreateGenre() {
         },
         {
           headers: {
-            "x-auth-token": cookies.token,
+            "x-auth-token": authToken,
           },
         }
       );

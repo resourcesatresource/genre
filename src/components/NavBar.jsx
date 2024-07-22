@@ -5,10 +5,19 @@ import { useCookies } from "react-cookie";
 import { useGet } from "../hooks/use-https";
 import { GET_ADMIN_STATUS } from "../constants/api-endpoints";
 import TABS from "../constants/navigation";
+import Dropdown from "../ui/dropdown";
+import { useAuthContext } from "../store";
+
+const DropdownOptions = [
+  {
+    title: "Profile",
+    navigateTo: "/me",
+  },
+];
 
 const UserGreeting = ({ userEmailId = "", isAdmin }) => {
   return (
-    <>
+    <div className="container d-flex">
       {userEmailId && (
         <section className="container text-primary-emphasis fw-medium">
           {`Hello, ${userEmailId}`}
@@ -23,7 +32,8 @@ const UserGreeting = ({ userEmailId = "", isAdmin }) => {
           )}
         </section>
       )}
-    </>
+      <Dropdown options={DropdownOptions} />
+    </div>
   );
 };
 
@@ -42,6 +52,7 @@ const NavTab = ({ title, target, activeTab }) => {
 
 function NavBar() {
   const { pathname } = useLocation();
+  const { isAuthenticated } = useAuthContext();
   const [cookies, setCookies] = useCookies(["token", "user", "isAdmin"]);
   const [username, setUsername] = useState("");
   const [activeTab, setActiveTab] = useState(pathname);
@@ -74,14 +85,14 @@ function NavBar() {
       setCookies("isAdmin", true);
       return;
     }
-  }, [data]);
+  }, [data?.isAdmin]);
 
   return (
     <>
       <nav className="container mt-2 mb-2">
         <div className="row">
           <NavTab title="Home" target={TABS.HOME} activeTab={activeTab} />
-          {cookies.token ? (
+          {isAuthenticated ? (
             <>
               <NavTab
                 title="Add"
@@ -104,7 +115,7 @@ function NavBar() {
         <hr className="border border-secondary border opacity-25"></hr>
       </nav>
 
-      {cookies.token && (
+      {isAuthenticated && (
         <UserGreeting userEmailId={username} isAdmin={cookies?.isAdmin} />
       )}
     </>

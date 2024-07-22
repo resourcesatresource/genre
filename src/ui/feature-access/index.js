@@ -1,9 +1,10 @@
 import { useCookies } from "react-cookie";
 import { ROLES } from "../../constants";
+import { useAuthContext } from "../../store";
 
 const FeatureAccess = ({ allowed = "", children }) => {
-  const [userContext, _] = useCookies();
-  if (!userContext?.token) {
+  const { isAuthenticated, isAdmin } = useAuthContext();
+  if (!isAuthenticated) {
     return null;
   }
 
@@ -12,7 +13,6 @@ const FeatureAccess = ({ allowed = "", children }) => {
   }
 
   if (allowed === ROLES.ADMIN) {
-    const isAdmin = userContext?.isAdmin === "true";
     return isAdmin ? children : null;
   }
 
