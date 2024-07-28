@@ -1,0 +1,11 @@
+/* Overriding bootstrap styling */
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-toggle {
+  border: none;
+  background: transparent;
+  font-size: larger;
+}

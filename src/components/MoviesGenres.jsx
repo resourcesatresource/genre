@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
+import React, { useState, useEffect, lazy } from "react";
 import { toast } from "react-toastify";
-import { useGet } from "../hooks/use-https";
+import { useGet, useDelete } from "../hooks/use-https";
 import FeatureAccess from "../ui/feature-access";
 import { ROLES } from "../constants";
-import configs from "../configs";
 import Loader from "../ui/loader";
-import { useAuthContext } from "../store";
+import { DELETE_GENRE, GET_GENRES } from "../constants/api-endpoints";
 
 function MoviesGenres() {
-  const { authToken } = useAuthContext();
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
-  const [cnt, setCnt] = useState(0);
+  const [recentlyDeletedItem, setRecentlyDeletedItem] = useState("");
 
-  const { data, error, loading } = useGet("/genres", { sendAuthToken: false });
+  const { data, error, loading } = useGet(GET_GENRES, { sendAuthToken: false });
+  const {
+    error: deleteError,
+    execute: deleteGenre,
+    success,
+  } = useDelete(DELETE_GENRE, {
+    sendAuthToken: true,
+    lazy: true,
+  });
 
   useEffect(() => {
     if (data) {
@@ -22,48 +27,30 @@ function MoviesGenres() {
     }
   }, [data]);
 
-  function handleDelete(id) {
-    fetch(`${configs.API_BASE_URL}/genres/${id}`, {
-      method: "DELETE",
-      headers: {
-        "x-auth-token": authToken,
-      },
-    })
-      .then((res) => {
-        if (res.status == 403) {
-          setMessage("You are not an admin, so you can't delete genre!");
-          setCnt((cnt) => cnt + 1);
-          return;
-        }
-        return res.json();
-      })
-      .then((res) => {
-        toast.warn(`${res.name} deleted`, {
-          autoClose: 1500,
-        });
-        setTimeout(() => {
-          location.reload();
-        }, 2500);
-      })
-      .catch((err) => {
-        toast.error("Something went wrong!", {
-          autoClose: 1500,
-        });
-        console.log(err);
+  useEffect(() => {
+    if (deleteError) {
+      setMessage(deleteError);
+    }
+    if (!deleteError && success) {
+      toast.success(`${recentlyDeletedItem} Deleted`, {
+        autoClose: 1500,
       });
-  }
+      setTimeout(() => {
+        location.reload();
+      }, 2500);
+    }
+  }, [success, deleteError]);
+
+  const handleDelete = (id) => {
+    deleteGenre(DELETE_GENRE.replace(":id", id));
+  };
+
   return (
     <div className="container mt-2 mb-5">
       <h1>Movies Genres:</h1>
       <p>Let's collaborate on creating list of movie genre</p>
       {error && <p className="text-center text-danger">{error}</p>}
-      {message ? (
-        <p className="text-center text-danger">
-          {cnt} {message}
-        </p>
-      ) : (
-        ""
-      )}
+      {message ? <p className="text-center text-danger">{message}</p> : ""}
       {loading && <Loader />}
       {genres.map((genre) => (
         <ul
@@ -81,7 +68,10 @@ function MoviesGenres() {
           <FeatureAccess allowed={ROLES.ADMIN}>
             <li className="list-group-item">
               <button
-                onClick={() => handleDelete(genre._id)}
+                onClick={() => {
+                  setRecentlyDeletedItem(genre?.name);
+                  handleDelete(genre._id);
+                }}
                 className="btn btn-warning"
               >
                 Delete

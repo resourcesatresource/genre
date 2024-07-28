@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import configs from "../configs";
+import Spinner from "../ui/spinner";
 function Auth() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -92,12 +93,7 @@ function Auth() {
             className="btn btn-primary"
             disabled={isDisabled}
           >
-            {isDisabled && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
+            <Spinner active={isDisabled} />
             Submit
           </button>
         </div>

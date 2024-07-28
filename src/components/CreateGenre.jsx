@@ -1,18 +1,24 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import lodash from "lodash";
 
-import configs from "../configs";
 import { useAuthContext } from "../store";
+import { usePost } from "../hooks/use-https";
+import { POST_GENRES } from "../constants/api-endpoints";
+import Spinner from "../ui/spinner";
 
 function CreateGenre() {
   const [name, setName] = useState("");
-  const { isAuthenticated, authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const navigate = useNavigate();
+
+  const { error, loading, execute, success } = usePost(POST_GENRES, {
+    sendAuthToken: true,
+    lazy: true,
+  });
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -23,29 +29,18 @@ function CreateGenre() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let genreName = lodash.capitalize(name);
-    try {
-      const response = await axios.post(
-        `${configs.API_BASE_URL}/genres`,
-        {
-          name: genreName,
-        },
-        {
-          headers: {
-            "x-auth-token": authToken,
-          },
-        }
-      );
-      navigate("/");
-
-      if (response.status == 200)
-        toast.success(`${genreName} added`, {
-          autoClose: 1500,
-        });
-      // Successfully added genre
-    } catch (error) {
-      console.log(error);
-    }
+    execute(POST_GENRES, { name: genreName });
   };
+
+  useEffect(() => {
+    if (success) {
+      toast.success(`${name} added`, {
+        autoClose: 1500,
+      });
+      navigate("/");
+    }
+  }, [success]);
+
   return (
     <div
       className="container p-5 rounded-4 mt-5 mb-5"
@@ -71,9 +66,11 @@ function CreateGenre() {
             className="form-control"
             required
           />
+          {error}
         </div>
         <div className="form-row">
           <button type="submit" className="btn btn-primary">
+            <Spinner active={loading} />
             Submit
           </button>
         </div>

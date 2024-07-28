@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./styles.css";
 
 const Dropdown = ({ title = "", options = [] }) => {
   return (
@@ -10,7 +11,7 @@ const Dropdown = ({ title = "", options = [] }) => {
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        More
+        &#8942;
       </button>
       <ul className="dropdown-menu dropdown-menu-light">
         {options.map((option, index) => {

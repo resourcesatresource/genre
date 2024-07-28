@@ -1,1 +1,4 @@
 export const GET_ADMIN_STATUS = "/users/admin/:id";
+export const GET_GENRES = "/genres";
+export const POST_GENRES = "/genres";
+export const DELETE_GENRE = "/genres/:id";
