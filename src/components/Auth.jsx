@@ -1,52 +1,60 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useCookies } from "react-cookie";
-import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import configs from "../configs";
 import Spinner from "../ui/spinner";
-function Auth() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [password, setPassword] = useState("");
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [_, setCookies] = useCookies(["token", "user"]);
+import { usePost } from "../hooks/use-https";
+import { POST_AUTH } from "../constants/api-endpoints";
+
+const Auth = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [_, setCookies] = useCookies([
+    "token",
+    "user",
+    "isAdmin",
+    "id",
+    "name",
+  ]);
+
+  const {
+    execute: authenticateUser,
+    error: authenticationError,
+    data: authContext,
+    loading,
+  } = usePost(POST_AUTH, {
+    lazy: true,
+  });
+
+  // Todo: Will soon handle with local storage
+  useEffect(() => {
+    if (!authenticationError && authContext) {
+      const { secureToken, user } = authContext;
+
+      setCookies("token", secureToken);
+      setCookies("user", user.email);
+      setCookies("isAdmin", user.isAdmin);
+      setCookies("id", user._id);
+      setCookies("name", user?.name);
+
+      navigate("/");
+
+      toast.success(`Welcome, ${user.email}`, {
+        autoClose: 2500,
+      });
+    }
+  }, [authContext, authenticationError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setIsDisabled(true);
-      const response = await axios.post(`${configs.API_BASE_URL}/auth`, {
-        email,
-        password,
-      });
-      // if credentials are invalid return with a message
-      if (response.data === "Invalid Password or User") {
-        console.log("Invalid Credentials");
-        setMessage("Invalid Password");
-        return;
-      }
-      if (response.data === "user not found") {
-        console.log("Invalid Credentials");
-        setMessage("No user with given email");
-        return;
-      }
-
-      setCookies("token", response.data);
-      setCookies("user", email);
-      navigate("/");
-      toast.success(`Welcome, ${email}`, {
-        autoClose: 2500,
-      });
-      setIsDisabled(false);
-    } catch (error) {
-      setIsDisabled(false);
-      console.log(error);
-      setMessage("Sorry, try after sometime");
-    }
+    authenticateUser(POST_AUTH, {
+      email,
+      password,
+    });
   };
+
   return (
     <div
       className="container p-5 rounded-4 mt-5 mb-5"
@@ -88,19 +96,15 @@ function Auth() {
           />
         </div>
         <div className="form-row">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isDisabled}
-          >
-            <Spinner active={isDisabled} />
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            <Spinner active={loading} />
             Submit
           </button>
         </div>
-        <div className="text-danger text-center">{message}</div>
+        <div className="text-danger text-center">{authenticationError}</div>
       </form>
     </div>
   );
-}
+};
 
 export default Auth;

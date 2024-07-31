@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logout from "./Logout";
-import { useCookies } from "react-cookie";
-import { useGet } from "../hooks/use-https";
-import { GET_ADMIN_STATUS } from "../constants/api-endpoints";
 import TABS from "../constants/navigation";
 import Dropdown from "../ui/dropdown";
 import { useAuthContext } from "../store";
@@ -52,40 +49,14 @@ const NavTab = ({ title, target, activeTab }) => {
 
 function NavBar() {
   const { pathname } = useLocation();
-  const { isAuthenticated } = useAuthContext();
-  const [cookies, setCookies] = useCookies(["token", "user", "isAdmin"]);
-  const [username, setUsername] = useState("");
+  const { email, isAuthenticated, isAdmin, name } = useAuthContext();
   const [activeTab, setActiveTab] = useState(pathname);
-
-  const { execute, data } = useGet(GET_ADMIN_STATUS, {
-    lazy: true,
-    sendAuthToken: true,
-  });
 
   useEffect(() => {
     if (pathname) {
       setActiveTab(pathname);
     }
   }, [pathname]);
-
-  useEffect(() => {
-    if (cookies.user) {
-      execute(GET_ADMIN_STATUS.replace(":id", cookies.user));
-    }
-  }, [cookies.user]);
-
-  useEffect(() => {
-    if (cookies.user) {
-      setUsername(cookies.user);
-    }
-  }, [cookies.user]);
-
-  useEffect(() => {
-    if (data?.isAdmin) {
-      setCookies("isAdmin", true);
-      return;
-    }
-  }, [data?.isAdmin]);
 
   return (
     <>
@@ -116,7 +87,7 @@ function NavBar() {
       </nav>
 
       {isAuthenticated && (
-        <UserGreeting userEmailId={username} isAdmin={cookies?.isAdmin} />
+        <UserGreeting userEmailId={name ?? email} isAdmin={isAdmin} />
       )}
     </>
   );
