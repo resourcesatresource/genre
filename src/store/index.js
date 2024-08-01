@@ -7,6 +7,7 @@ export const useAuthContext = () => {
   const [userContext, _] = useCookies();
 
   return {
+    name: userContext.name,
     email: userContext.user,
     authToken: userContext.token,
     isAdmin: userContext.isAdmin === "true",

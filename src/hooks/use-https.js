@@ -13,7 +13,6 @@ export const useQuery = (
   path,
   options = { lazy: false, sendAuthToken: true }
 ) => {
-  console.log(options);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
