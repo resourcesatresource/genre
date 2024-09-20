@@ -1,49 +1,42 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import configs from "../configs";
+
 import Spinner from "../ui/spinner";
-function Auth() {
+import { usePost } from "../hooks/use-https";
+import { POST_USER } from "../constants/api-endpoints";
+import Card from "../ui/card";
+import ErrorView from "./ErrorView";
+import { useUser } from "../services/user";
+
+function Register() {
   const navigate = useNavigate();
+  const { authenticateUser } = useUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isDisabled, setIsDisabled] = useState(false);
+
+  const { data, error, execute, loading } = usePost(POST_USER, {
+    lazy: true,
+  });
+
+  useEffect(() => {
+    if (!error && data) {
+      authenticateUser(data);
+      navigate("/login");
+    }
+  }, [data, error]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setIsDisabled(true);
-      const response = await axios.post(`${configs.API_BASE_URL}/users`, {
-        name,
-        email,
-        password,
-      });
-      console.log(response);
-      if (response.data === "User already exist with this email") {
-        toast.warn("User already exist with this email", {
-          autoClose: 1500,
-        });
-        setIsDisabled(false);
-        return;
-      }
-      setIsDisabled(false);
-      navigate("/login");
-    } catch (error) {
-      setIsDisabled(false);
-      console.log(error);
-    }
+    execute(POST_USER, {
+      name,
+      email,
+      password,
+    });
   };
+
   return (
-    <div
-      className="container p-5 rounded-4 mt-5 mb-5"
-      style={{
-        boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-      }}
-    >
+    <Card padding="xl" radius="lg" marginTop="xl" marginBottom="xl">
       <div className="text-center">
         <h1>Register</h1>
       </div>
@@ -88,18 +81,15 @@ function Auth() {
           />
         </div>
         <div className="form-row">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isDisabled}
-          >
-            <Spinner active={isDisabled} />
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            <Spinner active={loading} />
             Submit
           </button>
         </div>
       </form>
-    </div>
+      <ErrorView mode="danger" error={error} />
+    </Card>
   );
 }
 
-export default Auth;
+export default Register;

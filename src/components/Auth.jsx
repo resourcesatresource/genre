@@ -1,23 +1,19 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useCookies } from "react-cookie";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import Spinner from "../ui/spinner";
 import { usePost } from "../hooks/use-https";
 import { POST_AUTH } from "../constants/api-endpoints";
+import { useUser } from "../services/user";
+import { useAuthContext } from "../store";
+import ErrorView from "./ErrorView";
+import Card from "../ui/card";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [_, setCookies] = useCookies([
-    "token",
-    "user",
-    "isAdmin",
-    "id",
-    "name",
-  ]);
+  const { isAuthenticated } = useAuthContext();
+  const { authenticateUser: authenticate } = useUser();
 
   const {
     execute: authenticateUser,
@@ -28,21 +24,19 @@ const Auth = () => {
     lazy: true,
   });
 
-  // Todo: Will soon handle with local storage
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
+
   useEffect(() => {
     if (!authenticationError && authContext) {
       const { secureToken, user } = authContext;
 
-      setCookies("token", secureToken);
-      setCookies("user", user.email);
-      setCookies("isAdmin", user.isAdmin);
-      setCookies("id", user._id);
-      setCookies("name", user?.name);
-
-      navigate("/");
-
-      toast.success(`Welcome, ${user.email}`, {
-        autoClose: 2500,
+      authenticate({
+        ...user,
+        token: secureToken,
       });
     }
   }, [authContext, authenticationError]);
@@ -56,14 +50,8 @@ const Auth = () => {
   };
 
   return (
-    <div
-      className="container p-5 rounded-4 mt-5 mb-5"
-      style={{
-        boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-      }}
-    >
-      <div>
+    <Card padding="xl" radius="lg" marginTop="xl" marginBottom="xl">
+      <div className="text-center">
         <h1>Login</h1>
       </div>
       <form onSubmit={handleSubmit} className="form">
@@ -101,9 +89,9 @@ const Auth = () => {
             Submit
           </button>
         </div>
-        <div className="text-danger text-center">{authenticationError}</div>
+        <ErrorView mode="danger" error={authenticationError} />
       </form>
-    </div>
+    </Card>
   );
 };
 
