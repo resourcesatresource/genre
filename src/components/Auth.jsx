@@ -1,23 +1,22 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useCookies } from "react-cookie";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+
 import Spinner from "../ui/spinner";
 import { usePost } from "../hooks/use-https";
 import { POST_AUTH } from "../constants/api-endpoints";
+import { useUser } from "../services/user";
+import { useAuthContext } from "../store";
+import ErrorView from "./ErrorView";
+import Card from "../ui/card";
+import Icon from "../ui/icon";
 
-const Auth = () => {
+const Login = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuthContext();
+  const { authenticateUser: authenticate } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [_, setCookies] = useCookies([
-    "token",
-    "user",
-    "isAdmin",
-    "id",
-    "name",
-  ]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     execute: authenticateUser,
@@ -28,21 +27,19 @@ const Auth = () => {
     lazy: true,
   });
 
-  // Todo: Will soon handle with local storage
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
+
   useEffect(() => {
     if (!authenticationError && authContext) {
       const { secureToken, user } = authContext;
 
-      setCookies("token", secureToken);
-      setCookies("user", user.email);
-      setCookies("isAdmin", user.isAdmin);
-      setCookies("id", user._id);
-      setCookies("name", user?.name);
-
-      navigate("/");
-
-      toast.success(`Welcome, ${user.email}`, {
-        autoClose: 2500,
+      authenticate({
+        ...user,
+        token: secureToken,
       });
     }
   }, [authContext, authenticationError]);
@@ -56,14 +53,8 @@ const Auth = () => {
   };
 
   return (
-    <div
-      className="container p-5 rounded-4 mt-5 mb-5"
-      style={{
-        boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-      }}
-    >
-      <div>
+    <Card padding="xl" radius="lg" marginTop="xl" marginBottom="xl">
+      <div className="text-center">
         <h1>Login</h1>
       </div>
       <form onSubmit={handleSubmit} className="form">
@@ -85,15 +76,25 @@ const Auth = () => {
           <label htmlFor="password" className="form-label">
             Password:
           </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className="form-control"
-            required
-          />
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              className="form-control"
+              required
+            />
+            <button
+              class="btn border border-secondary-subtle"
+              type="button"
+              id="button-addon2"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              <Icon type="solid" name={showPassword ? "eye-slash" : "eye"} />
+            </button>
+          </div>
         </div>
         <div className="form-row">
           <button type="submit" className="btn btn-primary" disabled={loading}>
@@ -101,10 +102,10 @@ const Auth = () => {
             Submit
           </button>
         </div>
-        <div className="text-danger text-center">{authenticationError}</div>
+        <ErrorView mode="danger" error={authenticationError} />
       </form>
-    </div>
+    </Card>
   );
 };
 
-export default Auth;
+export default Login;
