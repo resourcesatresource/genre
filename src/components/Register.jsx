@@ -7,6 +7,7 @@ import { POST_USER } from "../constants/api-endpoints";
 import Card from "../ui/card";
 import ErrorView from "./ErrorView";
 import { useUser } from "../services/user";
+import Icon from "../ui/icon";
 
 function Register() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { data, error, execute, loading } = usePost(POST_USER, {
     lazy: true,
@@ -71,14 +73,24 @@ function Register() {
           <label htmlFor="password" className="form-label">
             Password:
           </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            className="form-control"
-            required
-          />
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-control"
+              required
+            />
+            <button
+              class="btn border border-secondary-subtle"
+              type="button"
+              id="button-addon2"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              <Icon type="solid" name={showPassword ? "eye-slash" : "eye"} />
+            </button>
+          </div>
         </div>
         <div className="form-row">
           <button type="submit" className="btn btn-primary" disabled={loading}>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Spinner from "../ui/spinner";
 import { usePost } from "../hooks/use-https";
 import { POST_AUTH } from "../constants/api-endpoints";
@@ -7,13 +8,15 @@ import { useUser } from "../services/user";
 import { useAuthContext } from "../store";
 import ErrorView from "./ErrorView";
 import Card from "../ui/card";
+import Icon from "../ui/icon";
 
-const Auth = () => {
+const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { isAuthenticated } = useAuthContext();
   const { authenticateUser: authenticate } = useUser();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     execute: authenticateUser,
@@ -73,15 +76,25 @@ const Auth = () => {
           <label htmlFor="password" className="form-label">
             Password:
           </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className="form-control"
-            required
-          />
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              className="form-control"
+              required
+            />
+            <button
+              class="btn border border-secondary-subtle"
+              type="button"
+              id="button-addon2"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              <Icon type="solid" name={showPassword ? "eye-slash" : "eye"} />
+            </button>
+          </div>
         </div>
         <div className="form-row">
           <button type="submit" className="btn btn-primary" disabled={loading}>
@@ -95,4 +108,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Login;
