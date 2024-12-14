@@ -17,16 +17,24 @@ export const useQuery = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [serverIdle, setServerIdle] = useState(false);
   const { authToken } = useAuthContext();
 
   const execute = useCallback(async (pathOnExecution) => {
     setLoading(true);
     setError("");
     setSuccess(null);
+    setServerIdle(false);
+
+    let serverIdleTimeout = setTimeout(() => {
+      setServerIdle(true);
+    }, 5000);
+
     try {
       if (options.sendAuthToken && !authToken) {
         return;
       }
+
       const response = await api[method](pathOnExecution ?? path, {
         headers: {
           ...(options.sendAuthToken && { "x-auth-token": authToken }),
@@ -42,6 +50,8 @@ export const useQuery = (
       setError(error?.response?.data?.message ?? "Something went wrong");
     } finally {
       setLoading(false);
+      setServerIdle(false);
+      clearTimeout(serverIdleTimeout);
     }
   }, []);
 
@@ -51,7 +61,7 @@ export const useQuery = (
     }
   }, []);
 
-  return { data, loading, error, execute, success };
+  return { data, loading, error, execute, success, serverIdle };
 };
 
 /* POST, PATCH, PUT */
@@ -64,13 +74,18 @@ const useHttps = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [serverIdle, setServerIdle] = useState(false);
   const { authToken } = useAuthContext();
 
   const execute = useCallback(async (pathOnExecution, payloadOnExecution) => {
     setLoading(true);
     setSuccess(null);
     setError("");
-    options;
+
+    let serverIdleTimeout = setTimeout(() => {
+      setServerIdle(true);
+    }, 5000);
+
     try {
       if (options.sendAuthToken && !authToken) {
         return;
@@ -96,6 +111,8 @@ const useHttps = (
       setError(error?.response?.data?.message ?? "Something went wrong!!");
     } finally {
       setLoading(false);
+      setServerIdle(false);
+      clearTimeout(serverIdleTimeout);
     }
   }, []);
 
@@ -105,7 +122,7 @@ const useHttps = (
     }
   }, []);
 
-  return { data, loading, error, execute, success };
+  return { data, loading, error, execute, success, serverIdle };
 };
 
 export const useGet = (path, options) => {
