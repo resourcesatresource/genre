@@ -3,12 +3,14 @@ import { toast } from "react-toastify";
 
 import { useGet, useDelete } from "../hooks/use-https";
 import FeatureAccess from "../ui/feature-access";
-import { ROLES } from "../constants";
 import Loader from "../ui/loader";
 import { DELETE_GENRE, GET_GENRES } from "../constants/api-endpoints";
 import ErrorView from "./ErrorView";
+import { useAuthContext } from "../store";
+import Icon from "../ui/icon";
 
 function MoviesGenres() {
+  const { id, isAdmin, isAuthenticated } = useAuthContext();
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
   const [recentlyDeletedItem, setRecentlyDeletedItem] = useState("");
@@ -78,19 +80,29 @@ function MoviesGenres() {
             <strong>{genre.name}</strong>
           </li>
 
-          <FeatureAccess allowed={ROLES.ADMIN}>
-            <li className="list-group-item">
-              <button
-                onClick={() => {
-                  setRecentlyDeletedItem(genre?.name);
-                  handleDelete(genre._id);
-                }}
-                className="btn btn-warning"
-              >
-                Delete
-              </button>
-            </li>
-          </FeatureAccess>
+          {isAuthenticated && (
+            <>
+              {id === genre?.author || isAdmin ? (
+                <li className="list-group-item">
+                  <button
+                    onClick={() => {
+                      setRecentlyDeletedItem(genre?.name);
+                      handleDelete(genre._id);
+                    }}
+                    className="btn btn-warning"
+                  >
+                    Delete
+                  </button>
+                </li>
+              ) : (
+                <li className="list-group-item">
+                  <button disabled className="btn btn-danger mx-3">
+                    <Icon name="ban"></Icon>
+                  </button>
+                </li>
+              )}
+            </>
+          )}
         </ul>
       ))}
       <FeatureAccess />
