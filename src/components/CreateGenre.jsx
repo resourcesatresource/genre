@@ -42,39 +42,41 @@ function CreateGenre() {
   }, [success]);
 
   return (
-    <div
-      className="container p-5 rounded-4 mt-5 mb-5"
-      style={{
-        boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-      }}
-    >
-      <div className="text-center">
-        <h1>Add movies genres to the list</h1>
+    <div className="mx-3">
+      <div
+        className="container p-5 rounded-4 mt-5 mb-5"
+        style={{
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        }}
+      >
+        <div className="text-center">
+          <h1>Add movies genres to the list</h1>
+        </div>
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-row mb-4">
+            <label htmlFor="genre" className="form-label">
+              Genre Name:
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="genre"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              className="form-control"
+              required
+            />
+            {error}
+          </div>
+          <div className="form-row">
+            <button type="submit" className="btn btn-primary">
+              <Spinner active={loading} />
+              Submit
+            </button>
+          </div>
+        </form>
       </div>
-      <form onSubmit={handleSubmit} className="form">
-        <div className="form-row mb-4">
-          <label htmlFor="genre" className="form-label">
-            Genre Name:
-          </label>
-          <input
-            type="text"
-            name="name"
-            id="genre"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            className="form-control"
-            required
-          />
-          {error}
-        </div>
-        <div className="form-row">
-          <button type="submit" className="btn btn-primary">
-            <Spinner active={loading} />
-            Submit
-          </button>
-        </div>
-      </form>
     </div>
   );
 }

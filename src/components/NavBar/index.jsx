@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logout from "./Logout";
-import TABS from "../constants/navigation";
-import Dropdown from "../ui/dropdown";
-import { useAuthContext } from "../store";
 
-const DropdownOptions = [
-  {
-    title: "Profile",
-    navigateTo: "/me",
-  },
-];
+import Logout from "../Logout";
+import { PAGES, TABS } from "../../constants/navigation";
+import Dropdown from "../../ui/dropdown";
+import { useAuthContext } from "../../store";
+import { getNavigationDropdownOptions } from "./helpers";
 
 const UserGreeting = ({ userEmailId = "", isAdmin }) => {
   return (
@@ -29,7 +24,7 @@ const UserGreeting = ({ userEmailId = "", isAdmin }) => {
           )}
         </section>
       )}
-      <Dropdown options={DropdownOptions} />
+      <Dropdown options={getNavigationDropdownOptions({ isAdmin })} />
     </div>
   );
 };
@@ -86,7 +81,7 @@ function NavBar() {
         <hr className="border border-secondary border opacity-25"></hr>
       </nav>
 
-      {isAuthenticated && (
+      {isAuthenticated && activeTab === PAGES.HOME && (
         <UserGreeting userEmailId={name ?? email} isAdmin={isAdmin} />
       )}
     </>
