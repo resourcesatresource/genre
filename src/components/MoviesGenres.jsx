@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 
 import { useGet, useDelete } from "../hooks/use-https";
 import FeatureAccess from "../ui/feature-access";
@@ -8,9 +7,11 @@ import { DELETE_GENRE, GET_GENRES } from "../constants/api-endpoints";
 import ErrorView from "./ErrorView";
 import { useAuthContext } from "../store";
 import Icon from "../ui/icon";
+import { useToast } from "../hooks/use-toast";
 
 function MoviesGenres() {
   const { id, isAdmin, isAuthenticated } = useAuthContext();
+  const { openToast } = useToast();
   const [genres, setGenres] = useState([]);
   const [message, setMessage] = useState("");
   const [recentlyDeletedItem, setRecentlyDeletedItem] = useState("");
@@ -39,9 +40,7 @@ function MoviesGenres() {
       setMessage(deleteError);
     }
     if (!deleteError && success) {
-      toast.success(`${recentlyDeletedItem} Deleted`, {
-        autoClose: 1500,
-      });
+      openToast(`${recentlyDeletedItem} Deleted`, "error");
       setTimeout(() => {
         location.reload();
       }, 2500);

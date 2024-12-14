@@ -1,19 +1,18 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import lodash from "lodash";
 
 import { useAuthContext } from "../store";
 import { usePost } from "../hooks/use-https";
 import { POST_GENRES } from "../constants/api-endpoints";
 import Spinner from "../ui/spinner";
+import { useToast } from "../hooks/use-toast";
 
 function CreateGenre() {
   const [name, setName] = useState("");
   const { isAuthenticated } = useAuthContext();
   const navigate = useNavigate();
+  const { openToast } = useToast();
 
   const { error, loading, execute, success } = usePost(POST_GENRES, {
     sendAuthToken: true,
@@ -34,9 +33,7 @@ function CreateGenre() {
 
   useEffect(() => {
     if (success) {
-      toast.success(`${name} added`, {
-        autoClose: 1500,
-      });
+      openToast(`${name} added`, "success");
       navigate("/");
     }
   }, [success]);
