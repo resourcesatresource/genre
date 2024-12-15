@@ -1,10 +1,23 @@
 import React from "react";
+import Spinner from "../spinner";
 
-const Button = ({ mode = "primary", onClick, children }) => {
+const Button = ({
+  mode = "primary",
+  onClick = () => {},
+  disabled = false,
+  isLoading = false,
+  children,
+}) => {
   return (
-    <div onClick={onClick} className={`btn btn-${mode}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`btn btn-${mode}`}
+      disabled={disabled}
+    >
       {children}
-    </div>
+      <Spinner active={isLoading} marginLeft="sm" marginRight="none" />
+    </button>
   );
 };
 
