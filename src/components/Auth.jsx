@@ -53,58 +53,64 @@ const Login = () => {
   };
 
   return (
-    <Card padding="xl" radius="lg" marginTop="xl" marginBottom="xl">
-      <div className="text-center">
-        <h1>Login</h1>
-      </div>
-      <form onSubmit={handleSubmit} className="form">
-        <div className="form-row mb-3">
-          <label htmlFor="email" className="form-label">
-            Email:
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            className="form-control"
-            required
-          />
+    <div className="mx-3">
+      <Card padding="xl" radius="lg" marginTop="xl" marginBottom="xl">
+        <div className="text-center">
+          <h1>Login</h1>
         </div>
-        <div className="form-row mb-3">
-          <label htmlFor="password" className="form-label">
-            Password:
-          </label>
-          <div className="input-group">
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-row mb-3">
+            <label htmlFor="email" className="form-label">
+              Email:
+            </label>
             <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
+              type="email"
+              name="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               className="form-control"
               required
             />
+          </div>
+          <div className="form-row mb-3">
+            <label htmlFor="password" className="form-label">
+              Password:
+            </label>
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                className="form-control"
+                required
+              />
+              <button
+                className="btn border border-secondary-subtle"
+                type="button"
+                id="button-addon2"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                <Icon type="solid" name={showPassword ? "eye-slash" : "eye"} />
+              </button>
+            </div>
+          </div>
+          <div className="form-row">
             <button
-              class="btn border border-secondary-subtle"
-              type="button"
-              id="button-addon2"
-              onClick={() => setShowPassword((prev) => !prev)}
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
             >
-              <Icon type="solid" name={showPassword ? "eye-slash" : "eye"} />
+              <Spinner active={loading} />
+              Submit
             </button>
           </div>
-        </div>
-        <div className="form-row">
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            <Spinner active={loading} />
-            Submit
-          </button>
-        </div>
-        <ErrorView mode="danger" error={authenticationError} />
-      </form>
-    </Card>
+          <ErrorView mode="danger" error={authenticationError} />
+        </form>
+      </Card>
+    </div>
   );
 };
 

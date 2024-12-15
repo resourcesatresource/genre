@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logout from "./Logout";
-import TABS from "../constants/navigation";
-import Dropdown from "../ui/dropdown";
-import { useAuthContext } from "../store";
 
-const DropdownOptions = [
-  {
-    title: "Profile",
-    navigateTo: "/me",
-  },
-];
+import Logout from "../Logout";
+import { PAGES, TABS } from "../../constants/navigation";
+import Dropdown from "../../ui/dropdown";
+import { useAuthContext } from "../../store";
+import {
+  getIconForTabs,
+  getNavigationDropdownOptions,
+  STRINGS,
+} from "./helpers";
+import Icon from "../../ui/icon";
 
-const UserGreeting = ({ userEmailId = "", isAdmin }) => {
+const UserGreeting = ({ userId = "", isAdmin }) => {
   return (
     <div className="container d-flex">
-      {userEmailId && (
-        <section className="container text-primary-emphasis fw-medium">
-          {`Hello, ${userEmailId}`}
+      {userId && (
+        <section className="container ps-0 text-primary-emphasis fw-medium">
+          {STRINGS.userGreeting.title.replace("{{userId}}", userId)}
           {isAdmin ? (
             <span className="ms-2 btn btn-info btn-sm text-white fw-bold">
-              Admin
+              {STRINGS.userGreeting.role.admin}
             </span>
           ) : (
             <span className="ms-2 btn btn-secondary btn-sm text-white fw-bold">
-              User
+              {STRINGS.userGreeting.role.user}
             </span>
           )}
         </section>
       )}
-      <Dropdown options={DropdownOptions} />
+      <Dropdown options={getNavigationDropdownOptions({ isAdmin })} />
     </div>
   );
 };
@@ -38,11 +38,11 @@ const NavTab = ({ title, target, activeTab }) => {
   return (
     <Link
       to={target}
-      className={`col mx-2 text-center text-decoration-none btn ${
+      className={`col mx-2 d-flex align-items-center justify-content-center text-center text-decoration-none btn ${
         activeTab === target ? "btn-success" : ""
       }`}
     >
-      {title}
+      <Icon name={getIconForTabs(title)} /> &nbsp; {title}
     </Link>
   );
 };
@@ -86,8 +86,8 @@ function NavBar() {
         <hr className="border border-secondary border opacity-25"></hr>
       </nav>
 
-      {isAuthenticated && (
-        <UserGreeting userEmailId={name ?? email} isAdmin={isAdmin} />
+      {isAuthenticated && activeTab === PAGES.HOME && (
+        <UserGreeting userId={name ?? email} isAdmin={isAdmin} />
       )}
     </>
   );

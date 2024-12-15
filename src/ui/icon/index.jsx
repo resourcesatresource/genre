@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useTheme } from "../../theme";
+
 /*
     TODO: Support for colors will be added soon
 */
@@ -8,10 +10,14 @@ const Icon = ({
   name = "hourglass",
   size = 16,
   onClick = () => {},
-  ...props
+  marginRight = "none",
 }) => {
+  const theme = useTheme();
   return (
-    <div onClick={onClick}>
+    <div
+      onClick={onClick}
+      className={`me-${theme.spacing[marginRight] ?? theme.spacing.none}`}
+    >
       <i
         className={`fa-${type} fa-${name}`}
         style={{

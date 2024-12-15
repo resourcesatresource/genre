@@ -1,12 +1,13 @@
 import React from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "../hooks/use-toast";
+import Icon from "../ui/icon";
 
 const Logout = () => {
   const [_, setCookies] = useCookies();
   const navigate = useNavigate();
+  const { openToast } = useToast();
 
   const handleLogout = () => {
     setCookies("token", "");
@@ -15,17 +16,18 @@ const Logout = () => {
     setCookies("id", "");
     setCookies("name", "");
     navigate("/");
-    toast.error("Logged out...", {
-      autoClose: 1500,
-    });
+    openToast("Logged out...", "error");
     setTimeout(() => {
       location.reload();
     }, 2500);
   };
 
   return (
-    <div onClick={handleLogout} className="col mx-2 btn btn-danger">
-      Logout
+    <div
+      onClick={handleLogout}
+      className="col mx-2 d-flex align-items-center justify-content-center btn btn-danger"
+    >
+      <Icon name="right-from-bracket" /> &nbsp; Logout
     </div>
   );
 };
