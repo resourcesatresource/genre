@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
+import Icon from "../icon";
 
 const Dropdown = ({ title = "", options = [] }) => {
   return (
@@ -21,7 +22,12 @@ const Dropdown = ({ title = "", options = [] }) => {
                 to={option.navigateTo}
                 className="dropdown-item text-decoration-none fw-medium"
               >
-                {option.title}
+                <div className="d-flex align-items-center">
+                  {option.icon && (
+                    <Icon name={option.icon} size={18} marginRight="sm" />
+                  )}
+                  {option.title}
+                </div>
               </Link>
             </li>
           );
