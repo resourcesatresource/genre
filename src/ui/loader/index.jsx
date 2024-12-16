@@ -1,8 +1,15 @@
 import React from "react";
+import { useTheme } from "../../theme";
 
-const Loader = () => {
+const Loader = ({ marginVertical = "none" }) => {
+  const theme = useTheme();
+
   return (
-    <div className="d-flex justify-content-center">
+    <div
+      className={`d-flex justify-content-center my-${
+        theme.spacing[marginVertical] ?? theme.spacing.none
+      }`}
+    >
       <div className="spinner-border text-primary" role="status">
         <span className="visually-hidden">Loading...</span>
       </div>

@@ -67,7 +67,11 @@ function CreateGenre() {
             {error}
           </div>
           <div className="form-row">
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+            >
               <Spinner active={loading} />
               Submit
             </button>

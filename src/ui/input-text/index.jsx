@@ -4,7 +4,7 @@ const InputText = ({
   value = "",
   label = "",
   type = "text",
-  onChange = () => {},
+  onChange = (text) => {},
   required = false,
 }) => {
   return (
