@@ -4,8 +4,9 @@ import { useAuthContext } from "../../store";
 import AdminRequest from "../../components/actions/admin-request";
 import ErrorView from "../../components/ErrorView";
 import Icon from "../../ui/icon";
+import { DataViewProps } from "./typings";
 
-const DataView = ({ label = "", children }) => {
+const DataView: React.FC<DataViewProps> = ({ label, children }) => {
   return (
     <div className="d-flex flex-row justify-content-between align-items-center bg-light-subtle border rounded-2 p-2 mb-2">
       {label && <span className="ps-2">{label}</span>}

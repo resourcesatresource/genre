@@ -2,8 +2,14 @@ import React from "react";
 
 import { getUIDetailsBasedOnMode } from "./helpers";
 import { useTheme } from "../../theme";
+import { ErrorViewProps } from "./typings";
 
-const ErrorView = ({ error = "", mode, marginBottom = "none", children }) => {
+const ErrorView: React.FC<ErrorViewProps> = ({
+  error,
+  mode,
+  marginBottom = "none",
+  children,
+}) => {
   const theme = useTheme();
   const uiInfo = getUIDetailsBasedOnMode(mode);
 
