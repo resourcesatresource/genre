@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Spinner from "../ui/spinner";
 import { usePost } from "../hooks/use-https";
 import { POST_USER } from "../constants/api-endpoints";
 import Card from "../ui/card";
 import ErrorView from "./ErrorView";
 import { useUser } from "../services/user";
 import Icon from "../ui/icon";
+import Button from "../ui/button";
 
 function Register() {
   const navigate = useNavigate();
@@ -94,14 +94,9 @@ function Register() {
             </div>
           </div>
           <div className="form-row">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              <Spinner active={loading} />
+            <Button type="submit" disabled={loading} isLoading={loading}>
               Submit
-            </button>
+            </Button>
           </div>
         </form>
         <ErrorView mode="danger" error={error} />

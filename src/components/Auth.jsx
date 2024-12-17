@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Spinner from "../ui/spinner";
 import { usePost } from "../hooks/use-https";
 import { POST_AUTH } from "../constants/api-endpoints";
 import { useUser } from "../services/user";
@@ -9,6 +8,7 @@ import { useAuthContext } from "../store";
 import ErrorView from "./ErrorView";
 import Card from "../ui/card";
 import Icon from "../ui/icon";
+import Button from "../ui/button";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -98,14 +98,9 @@ const Login = () => {
             </div>
           </div>
           <div className="form-row">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              <Spinner active={loading} />
+            <Button type="submit" disabled={loading} isLoading={loading}>
               Submit
-            </button>
+            </Button>
           </div>
           <ErrorView mode="danger" error={authenticationError} />
         </form>

@@ -2,6 +2,7 @@ export const STRINGS = {
   page: {
     title: "Movies Genres:",
     subTitle: "Let's collaborate on creating list of movie genre.",
+    deletionSuccessMessage: "{{deletedItem}} Deleted",
   },
   errors: {
     genreLengthRequirement: "Genre name must be between 3 to 20 characters.",
@@ -11,6 +12,7 @@ export const STRINGS = {
   editModal: {
     title: "Edit",
     inputLabel: "Edit your genre name",
+    successMessage: "{{name}} Saved",
   },
 };
 
