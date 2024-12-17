@@ -46,10 +46,11 @@ const Modal = ({
               <div className="modal-body">{children}</div>
               {showFooter && (
                 <div className="modal-footer">
-                  <Button mode="secondary" onClick={close}>
+                  <Button mode="secondary" icon="close" onClick={close}>
                     Close
                   </Button>
                   <Button
+                    icon="paper-plane"
                     isLoading={isLoading}
                     onClick={onSave}
                     disabled={disabled || isLoading}

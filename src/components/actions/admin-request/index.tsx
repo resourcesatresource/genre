@@ -8,7 +8,7 @@ const AdminRequest: React.FC<{
   onError?: (error: string) => void;
   onSuccess?: (message: string) => void;
 }> = ({ onError, onSuccess }) => {
-  const { execute, error, success } = usePost(POST_ADMIN_REQUEST, {
+  const { execute, error, success, loading } = usePost(POST_ADMIN_REQUEST, {
     lazy: true,
   });
 
@@ -30,7 +30,16 @@ const AdminRequest: React.FC<{
     execute();
   };
 
-  return <Button onClick={handleRequest}>Request for admin access</Button>;
+  return (
+    <Button
+      icon="user-tie"
+      onClick={handleRequest}
+      isLoading={loading}
+      disabled={loading}
+    >
+      Request for admin access
+    </Button>
+  );
 };
 
 export default AdminRequest;

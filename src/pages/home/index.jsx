@@ -6,11 +6,11 @@ import Loader from "../../ui/loader";
 import { DELETE_GENRE, GET_GENRES } from "../../constants/api-endpoints";
 import ErrorView from "../../components/ErrorView";
 import { useAuthContext } from "../../store";
-import Icon from "../../ui/icon";
 import { useToast } from "../../hooks/use-toast";
 import Button from "../../ui/button";
 import { ErrorField, STRINGS } from "./helpers";
 import EditModal from "./edit-modal";
+import Portal from "../../ui/styled-component/portal";
 
 const Home = () => {
   const { id, isAdmin, isAuthenticated } = useAuthContext();
@@ -137,7 +137,9 @@ const Home = () => {
         marginBottom="sm"
       ></ErrorView>
 
-      {loading && <Loader marginVertical="sm" />}
+      <Portal isVisible={loading || deleteGenreLoading}>
+        <Loader isLoading={loading || deleteGenreLoading} />
+      </Portal>
 
       {genres.map((genre) => (
         <ul
@@ -160,10 +162,9 @@ const Home = () => {
             <li className="list-group-item">
               <Button
                 mode="warning"
+                icon="pen-to-square"
                 onClick={() => openEditModal(genre?._id, genre?.name)}
-              >
-                <Icon name="pen-to-square" />
-              </Button>
+              ></Button>
             </li>
           )}
 
@@ -175,15 +176,12 @@ const Home = () => {
                     mode="danger"
                     onClick={() => handleDelete(genre?._id, genre?.name)}
                     disabled={deleteGenreLoading}
-                  >
-                    <Icon name="trash" />
-                  </Button>
+                    icon="trash"
+                  ></Button>
                 </li>
               ) : (
                 <li className="list-group-item">
-                  <Button mode="danger" disabled>
-                    <Icon name="ban"></Icon>
-                  </Button>
+                  <Button mode="danger" icon="ban" disabled></Button>
                 </li>
               )}
             </>
