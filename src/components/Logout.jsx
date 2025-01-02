@@ -17,9 +17,6 @@ const Logout = () => {
     setCookies("name", "");
     navigate("/");
     openToast("Logged out...", "error");
-    setTimeout(() => {
-      location.reload();
-    }, 2500);
   };
 
   return (

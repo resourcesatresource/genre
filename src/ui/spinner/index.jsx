@@ -3,7 +3,7 @@ import { useTheme } from "../../theme";
 
 const Spinner = ({
   active = false,
-  marginRight = "sm",
+  marginRight = "none",
   marginLeft = "none",
 }) => {
   const theme = useTheme();

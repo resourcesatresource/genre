@@ -5,8 +5,8 @@ import lodash from "lodash";
 import { useAuthContext } from "../store";
 import { usePost } from "../hooks/use-https";
 import { POST_GENRES } from "../constants/api-endpoints";
-import Spinner from "../ui/spinner";
 import { useToast } from "../hooks/use-toast";
+import Button from "../ui/button";
 
 function CreateGenre() {
   const [name, setName] = useState("");
@@ -17,12 +17,6 @@ function CreateGenre() {
   const { error, loading, execute, success } = usePost(POST_GENRES, {
     sendAuthToken: true,
     lazy: true,
-  });
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
   });
 
   const handleSubmit = async (e) => {
@@ -67,10 +61,14 @@ function CreateGenre() {
             {error}
           </div>
           <div className="form-row">
-            <button type="submit" className="btn btn-primary">
-              <Spinner active={loading} />
+            <Button
+              type="submit"
+              icon="paper-plane"
+              disabled={loading}
+              isLoading={loading}
+            >
               Submit
-            </button>
+            </Button>
           </div>
         </form>
       </div>
