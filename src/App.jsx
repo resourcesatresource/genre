@@ -24,8 +24,8 @@ function App() {
           <Route path={PAGES.HOME} element={<Home />} />
           <Route path={PAGES.LOGIN} element={<Auth />} />
           <Route path={PAGES.REGISTER} element={<Register />} />
-          <Route path={PAGES.ADD_GENRE} element={<CreateGenre />} />
           <Route element={<ProtectedRoutes />}>
+            <Route path={PAGES.ADD_GENRE} element={<CreateGenre />} />
             <Route path={PAGES.PROFILE} element={<Profile />} />
           </Route>
         </Routes>

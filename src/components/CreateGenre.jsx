@@ -19,12 +19,6 @@ function CreateGenre() {
     lazy: true,
   });
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     let genreName = lodash.capitalize(name);
