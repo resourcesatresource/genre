@@ -45,4 +45,21 @@ export default {
       },
     },
   },
+  moderation_management: {
+    cards: {
+      admin_list: {
+        title: "Admin List",
+        empty_state: {
+          title:
+            "No admins at the moment, Check if we have any requester to grant access!",
+        },
+      },
+      requester_list: {
+        title: "Requester List",
+        empty_state: {
+          title: "Currently no requests are found, Check after a while!",
+        },
+      },
+    },
+  },
 };

@@ -7,7 +7,7 @@ export const TABS = {
 
 export const PAGES = {
   HOME: "/",
-  ModerationApproval: "/moderation-approval",
+  ModerationManagement: "/admin/moderation",
   PROFILE: "/me",
   LOGIN: "/login",
   REGISTER: "/register",

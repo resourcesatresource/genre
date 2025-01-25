@@ -8,6 +8,15 @@ export const getNavigationDropdownOptions = ({ isAdmin = false }) => {
       icon: "circle-user",
       navigateTo: PAGES.PROFILE,
     },
+    ...(isAdmin
+      ? [
+          {
+            title: "Moderation",
+            icon: "circle-check",
+            navigateTo: PAGES.ModerationManagement,
+          },
+        ]
+      : []),
   ];
 };
 
