@@ -4,6 +4,9 @@ export default {
       update: {
         label: "Update",
       },
+      change: {
+        label: "Change",
+      },
     },
   },
   change_password: {

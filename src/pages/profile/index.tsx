@@ -8,6 +8,7 @@ import Icon from "../../ui/icon";
 import { DataViewProps } from "./typings";
 import Button from "../../ui/button";
 import { PAGES } from "../../constants/navigation";
+import { t } from "../../services/i18n";
 
 const DataView: React.FC<DataViewProps> = ({ label, children }) => {
   return (
@@ -70,7 +71,7 @@ const Profile = () => {
           icon="exchange-alt"
           onClick={() => navigate(PAGES.CHANGE_PASSWORD)}
         >
-          Change
+          {t("commons.buttons.change.label")}
         </Button>
       </DataView>
 

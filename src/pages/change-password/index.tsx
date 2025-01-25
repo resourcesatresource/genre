@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { snakeCase } from "lodash";
 
 import Button from "../../ui/button";
 import InputText from "../../ui/input-text";
@@ -9,7 +10,6 @@ import { POST_CHANGE_PASSWORD } from "../../constants/api-endpoints";
 import { ERROR_KIND_MAP } from "./utils";
 import { useToast } from "../../hooks/use-toast";
 import { t } from "../../services/i18n";
-import { camelCase, snakeCase } from "lodash";
 
 const ChangePassword = () => {
   const { openToast } = useToast();
@@ -199,7 +199,7 @@ const ChangePassword = () => {
         icon="pen-square"
         onClick={onChangePassword}
         isLoading={loading}
-        disabled={loading || isValidationError()}
+        disabled={loading}
       >
         {t("commons.buttons.update.label")}
       </Button>
