@@ -62,4 +62,10 @@ export default {
       },
     },
   },
+  users_listing: {
+    title: "Users list",
+    empty_state: {
+      title: "Oops, no user!",
+    },
+  },
 };

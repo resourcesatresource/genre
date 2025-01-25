@@ -16,6 +16,7 @@ import Home from "./pages/home";
 import { PAGES } from "./constants/navigation";
 import ChangePassword from "./pages/change-password";
 import ModerationManagement from "./pages/moderation-management";
+import UsersListing from "./pages/users";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               path={PAGES.ModerationManagement}
               element={<ModerationManagement />}
             />
+            <Route path={PAGES.USERS_LISTING} element={<UsersListing />} />
           </Route>
         </Routes>
       </BrowserRouter>

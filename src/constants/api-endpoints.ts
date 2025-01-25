@@ -1,6 +1,7 @@
 export const POST_AUTH = "/auth";
 export const POST_USER = "/users";
 export const POST_CHANGE_PASSWORD = "/users/change-password";
+export const GET_USERS = "/users";
 export const GET_ADMIN_LIST = "/users/admins";
 export const GET_ADMIN_REQUESTS = "/users/admin/requests";
 export const POST_ADMIN_REQUEST = "/users/admin";

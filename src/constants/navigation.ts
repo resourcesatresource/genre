@@ -8,6 +8,7 @@ export const TABS = {
 export const PAGES = {
   HOME: "/",
   ModerationManagement: "/admin/moderation",
+  USERS_LISTING: "/admin/users",
   PROFILE: "/me",
   LOGIN: "/login",
   REGISTER: "/register",
