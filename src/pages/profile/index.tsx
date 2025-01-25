@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAuthContext } from "../../store";
 import AdminRequest from "../../components/actions/admin-request";
 import ErrorView from "../../components/ErrorView";
 import Icon from "../../ui/icon";
 import { DataViewProps } from "./typings";
+import Button from "../../ui/button";
+import { PAGES } from "../../constants/navigation";
 
 const DataView: React.FC<DataViewProps> = ({ label, children }) => {
   return (
@@ -17,6 +20,8 @@ const DataView: React.FC<DataViewProps> = ({ label, children }) => {
 
 const Profile = () => {
   const { email, id, name, isAdmin } = useAuthContext();
+  const navigate = useNavigate();
+
   const [adminRequestError, setAdminRequestError] = useState("");
   const [adminRequestSuccess, setAdminRequestSuccess] = useState("");
 
@@ -58,6 +63,15 @@ const Profile = () => {
             onSuccess={setAdminRequestSuccess}
           />
         )}
+      </DataView>
+
+      <DataView label="Change password">
+        <Button
+          icon="exchange-alt"
+          onClick={() => navigate(PAGES.CHANGE_PASSWORD)}
+        >
+          Change
+        </Button>
       </DataView>
 
       <ErrorView mode="danger" error={adminRequestError} />

@@ -12,4 +12,5 @@ export const PAGES = {
   LOGIN: "/login",
   REGISTER: "/register",
   ADD_GENRE: "/create",
+  CHANGE_PASSWORD: "/change-password",
 };

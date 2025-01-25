@@ -14,6 +14,7 @@ import ProtectedRoutes from "./navigation/protected-routes";
 import Profile from "./pages/profile";
 import Home from "./pages/home";
 import { PAGES } from "./constants/navigation";
+import ChangePassword from "./pages/change-password";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path={PAGES.ADD_GENRE} element={<CreateGenre />} />
             <Route path={PAGES.PROFILE} element={<Profile />} />
+            <Route path={PAGES.CHANGE_PASSWORD} element={<ChangePassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
