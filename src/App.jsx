@@ -17,6 +17,7 @@ import { PAGES } from "./constants/navigation";
 import ChangePassword from "./pages/change-password";
 import ModerationManagement from "./pages/moderation-management";
 import UsersListing from "./pages/users";
+import ResetPassword from "./pages/reset-password";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path={PAGES.HOME} element={<Home />} />
           <Route path={PAGES.LOGIN} element={<Auth />} />
           <Route path={PAGES.REGISTER} element={<Register />} />
+          <Route path={PAGES.RESET_PASSWORD} element={<ResetPassword />} />
           <Route element={<ProtectedRoutes />}>
             <Route path={PAGES.ADD_GENRE} element={<CreateGenre />} />
             <Route path={PAGES.PROFILE} element={<Profile />} />

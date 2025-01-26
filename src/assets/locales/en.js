@@ -9,10 +9,30 @@ export default {
       },
     },
   },
+  login: {
+    toasts: {
+      successful_reset_request: {
+        label: "Requested successfully",
+      },
+    },
+    request_reset_password_modal: {
+      title: "Reset password request",
+      inputs: {
+        email: {
+          label: "Email",
+          errors: {
+            empty: {
+              label: "Email cannot be empty",
+            },
+          },
+        },
+      },
+    },
+  },
   change_password: {
     toasts: {
       successful_password_change: {
-        label: "Password change",
+        label: "Password changed",
       },
     },
     inputs: {
@@ -66,6 +86,34 @@ export default {
     title: "Users list",
     empty_state: {
       title: "Oops, no user!",
+    },
+  },
+  reset_password: {
+    toasts: {
+      successful_password_change: {
+        label: "Password changed",
+      },
+    },
+    inputs: {
+      new_password: {
+        label: "New Password",
+        errors: {
+          empty: {
+            label: "New password field cannot be empty",
+          },
+        },
+      },
+      confirmed_new_password: {
+        label: "Confirm New Password",
+        errors: {
+          empty: {
+            label: "Confirm password field cannot be empty",
+          },
+          notSame: {
+            label: "New password and confirmed new password must be same",
+          },
+        },
+      },
     },
   },
 };

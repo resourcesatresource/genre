@@ -6,36 +6,38 @@ import InputText from "../../ui/input-text";
 import PageWrapper from "../../ui/page-wrapper";
 import { InputFields } from "./types";
 import { usePost } from "../../hooks/use-https";
-import { POST_CHANGE_PASSWORD } from "../../constants/api-endpoints";
-import { ERROR_KIND_MAP } from "./utils";
+import { POST_AUTH_RESET_PASSWORD } from "../../constants/api-endpoints";
 import { useToast } from "../../hooks/use-toast";
 import { t } from "../../services/i18n";
-import { useNavigation } from "../../hooks/use-navigation";
 import { PAGES } from "../../constants/navigation";
+import { useNavigation } from "../../hooks/use-navigation";
+import Card from "../../ui/card";
+import ErrorView from "../../components/ErrorView";
 
-const ChangePassword = () => {
+const ResetPassword = () => {
   const { openToast } = useToast();
-  const { navigateTo } = useNavigation();
+  const { getQueryParams, navigateTo } = useNavigation();
 
-  const { execute, error, success, errorKind, loading } = usePost(
-    POST_CHANGE_PASSWORD,
-    {
-      lazy: true,
-    }
-  );
+  const { token } = getQueryParams<{ token?: string }>();
+
+  const [validationToken, setValidationToken] = useState<string>();
 
   const [inputFields, setInputFields] = useState({
-    currentPassword: "",
     newPassword: "",
     confirmedNewPassword: "",
   });
 
   const [errors, setErrors] = useState({
-    currentPassword: "",
     newPassword: "",
     confirmedNewPassword: "",
   });
 
+  const { execute, error, success, errorKind, loading } = usePost(
+    POST_AUTH_RESET_PASSWORD,
+    {
+      lazy: true,
+    }
+  );
   const setInputField = (field: string, value: string) => {
     setInputFields((prev) => {
       return {
@@ -71,16 +73,9 @@ const ChangePassword = () => {
   };
 
   const validateInputFields = (field: string) => {
-    if (field === InputFields.currentPassword) {
-      if (inputFields[field].length == 0) {
-        errors.currentPassword = setValidationError(field);
-        return;
-      }
-    }
-
     if (field === InputFields.newPassword) {
       if (inputFields[field].length == 0) {
-        errors.currentPassword = setValidationError(field);
+        errors.newPassword = setValidationError(field);
         return;
       }
     }
@@ -116,11 +111,7 @@ const ChangePassword = () => {
   };
 
   const isValidationError = () => {
-    return (
-      !!errors.currentPassword ||
-      !!errors.newPassword ||
-      !!errors.confirmedNewPassword
-    );
+    return !!errors.newPassword || !!errors.confirmedNewPassword;
   };
 
   const validateAllFields = () => {
@@ -136,14 +127,10 @@ const ChangePassword = () => {
       }
     }
 
-    if (inputFields.currentPassword !== inputFields.confirmedNewPassword) {
-      return false;
-    }
-
     return isValidationPassed;
   };
 
-  const onChangePassword = () => {
+  const onResetPassword = () => {
     resetValidationErrors();
 
     validateAllFields();
@@ -152,63 +139,64 @@ const ChangePassword = () => {
       return;
     }
 
-    execute(POST_CHANGE_PASSWORD, {
-      old: inputFields.currentPassword,
-      new: inputFields.newPassword,
+    execute(POST_AUTH_RESET_PASSWORD, {
+      validationToken,
+      newPassword: inputFields.newPassword,
     });
   };
 
   useEffect(() => {
-    if (error && errorKind) {
-      setValidationError(ERROR_KIND_MAP[errorKind], error);
-    }
-
     if (!error && success) {
       openToast(
-        t("change_password.toasts.successful_password_change.label"),
+        t("reset_password.toasts.successful_password_change.label"),
         "success"
       );
+
       resetInputFields();
-      navigateTo(PAGES.PROFILE);
+      navigateTo(PAGES.LOGIN);
     }
   }, [success, error, errorKind]);
 
+  useEffect(() => {
+    if (!token) {
+      navigateTo(PAGES.HOME);
+      return;
+    }
+
+    setValidationToken(token);
+  }, [token]);
+
   return (
     <PageWrapper>
-      <InputText
-        label={t("change_password.inputs.current_password.label")}
-        value={inputFields.currentPassword}
-        error={errors.currentPassword}
-        onChange={(v) => onInputChange(v, InputFields.currentPassword)}
-        onBlur={() => validateInputFields(InputFields.currentPassword)}
-      ></InputText>
+      <ErrorView error={error ?? undefined} mode="danger"></ErrorView>
+      <Card padding="lg">
+        <InputText
+          label={t("reset_password.inputs.new_password.label")}
+          value={inputFields.newPassword}
+          error={errors.newPassword}
+          onChange={(v) => onInputChange(v, InputFields.newPassword)}
+          onBlur={() => validateInputFields(InputFields.newPassword)}
+        ></InputText>
 
-      <InputText
-        label={t("change_password.inputs.new_password.label")}
-        value={inputFields.newPassword}
-        error={errors.newPassword}
-        onChange={(v) => onInputChange(v, InputFields.newPassword)}
-        onBlur={() => validateInputFields(InputFields.newPassword)}
-      ></InputText>
+        <InputText
+          label={t("reset_password.inputs.confirmed_new_password.label")}
+          value={inputFields.confirmedNewPassword}
+          error={errors.confirmedNewPassword}
+          onChange={(v) => onInputChange(v, InputFields.confirmedNewPassword)}
+          onBlur={() => validateInputFields(InputFields.confirmedNewPassword)}
+        ></InputText>
 
-      <InputText
-        label={t("change_password.inputs.confirmed_new_password.label")}
-        value={inputFields.confirmedNewPassword}
-        error={errors.confirmedNewPassword}
-        onChange={(v) => onInputChange(v, InputFields.confirmedNewPassword)}
-        onBlur={() => validateInputFields(InputFields.confirmedNewPassword)}
-      ></InputText>
-
-      <Button
-        icon="pen-square"
-        onClick={onChangePassword}
-        isLoading={loading}
-        disabled={loading}
-      >
-        {t("commons.buttons.update.label")}
-      </Button>
+        <Button
+          icon="key"
+          onClick={onResetPassword}
+          isLoading={loading}
+          disabled={loading}
+        >
+          {t("commons.buttons.update.label")}
+        </Button>
+      </Card>
     </PageWrapper>
   );
 };
 
-export default ChangePassword;
+export default ResetPassword;
