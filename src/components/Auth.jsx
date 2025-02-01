@@ -150,9 +150,13 @@ const Login = () => {
             <ErrorView mode="danger" error={authenticationError} />
           </form>
           {!isRequestResetPasswordLoading && (
-            <p className="text-center">
+            <p className="mt-2 text-center">
               <strong className="text-danger">Forgot password?</strong>{" "}
-              <a className="text-primary" onClick={onRequestResetPasswordClick}>
+              <a
+                role="button"
+                className="text-primary"
+                onClick={onRequestResetPasswordClick}
+              >
                 request here
               </a>
             </p>
