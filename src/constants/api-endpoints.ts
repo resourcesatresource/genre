@@ -1,4 +1,5 @@
 export const POST_AUTH = "/auth";
+export const POST_AUTH_VERIFY_TOKEN = "/auth/verify-token";
 export const POST_AUTH_REQUEST_RESET_PASSWORD = "/auth/request-reset-password";
 export const POST_AUTH_RESET_PASSWORD = "/auth/reset-password";
 export const POST_USER = "/users";

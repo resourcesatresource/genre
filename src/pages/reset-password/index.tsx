@@ -6,7 +6,10 @@ import InputText from "../../ui/input-text";
 import PageWrapper from "../../ui/page-wrapper";
 import { InputFields } from "./types";
 import { usePost } from "../../hooks/use-https";
-import { POST_AUTH_RESET_PASSWORD } from "../../constants/api-endpoints";
+import {
+  POST_AUTH_RESET_PASSWORD,
+  POST_AUTH_VERIFY_TOKEN,
+} from "../../constants/api-endpoints";
 import { useToast } from "../../hooks/use-toast";
 import { t } from "../../services/i18n";
 import { PAGES } from "../../constants/navigation";
@@ -30,6 +33,14 @@ const ResetPassword = () => {
   const [errors, setErrors] = useState({
     newPassword: "",
     confirmedNewPassword: "",
+  });
+
+  const {
+    execute: verifyToken,
+    error: verifyTokenError,
+    loading: verifyTokenLoading,
+  } = usePost(POST_AUTH_VERIFY_TOKEN, {
+    lazy: true,
   });
 
   const { execute, error, success, errorKind, loading } = usePost(
@@ -160,14 +171,25 @@ const ResetPassword = () => {
   useEffect(() => {
     if (!token) {
       navigateTo(PAGES.HOME);
+
       return;
     }
 
     setValidationToken(token);
+    verifyToken(POST_AUTH_VERIFY_TOKEN, token);
   }, [token]);
 
+  useEffect(() => {
+    if (verifyTokenError) {
+      openToast(t("reset_password.toasts.invalid_credentials.label"), "error");
+
+      resetInputFields();
+      navigateTo(PAGES.HOME);
+    }
+  }, [verifyTokenError]);
+
   return (
-    <PageWrapper>
+    <PageWrapper isLoading={verifyTokenLoading}>
       <ErrorView error={error ?? undefined} mode="danger"></ErrorView>
       <Card padding="lg">
         <InputText

@@ -93,6 +93,9 @@ export default {
       successful_password_change: {
         label: "Password changed",
       },
+      invalid_credentials: {
+        label: "Invalid credentials",
+      },
     },
     inputs: {
       new_password: {
