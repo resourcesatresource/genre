@@ -73,6 +73,7 @@ const useHttps = (
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorKind, setErrorKind] = useState(null);
   const [success, setSuccess] = useState(null);
   const [serverIdle, setServerIdle] = useState(false);
   const { authToken } = useAuthContext();
@@ -81,6 +82,7 @@ const useHttps = (
     setLoading(true);
     setSuccess(null);
     setError("");
+    setErrorKind("");
 
     let serverIdleTimeout = setTimeout(() => {
       setServerIdle(true);
@@ -109,6 +111,7 @@ const useHttps = (
     } catch (error) {
       setSuccess(null);
       setError(error?.response?.data?.message ?? "Something went wrong!!");
+      setErrorKind(error?.response?.data?.id ?? "");
     } finally {
       setLoading(false);
       setServerIdle(false);
@@ -122,7 +125,7 @@ const useHttps = (
     }
   }, []);
 
-  return { data, loading, error, execute, success, serverIdle };
+  return { data, loading, error, execute, success, serverIdle, errorKind };
 };
 
 export const useGet = (path, options) => {

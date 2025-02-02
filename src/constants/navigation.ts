@@ -7,9 +7,12 @@ export const TABS = {
 
 export const PAGES = {
   HOME: "/",
-  ModerationApproval: "/moderation-approval",
+  ModerationManagement: "/admin/moderation",
+  USERS_LISTING: "/admin/users",
   PROFILE: "/me",
   LOGIN: "/login",
   REGISTER: "/register",
   ADD_GENRE: "/create",
+  CHANGE_PASSWORD: "/change-password",
+  RESET_PASSWORD: "/reset-password",
 };
