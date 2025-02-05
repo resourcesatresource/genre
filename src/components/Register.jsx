@@ -94,7 +94,12 @@ function Register() {
             </div>
           </div>
           <div className="form-row">
-            <Button type="submit" disabled={loading} isLoading={loading}>
+            <Button
+              type="submit"
+              icon="user-plus"
+              disabled={loading}
+              isLoading={loading}
+            >
               Submit
             </Button>
           </div>
