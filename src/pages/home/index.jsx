@@ -59,8 +59,8 @@ const Home = () => {
 
     if (data && !error && isArray(data)) {
       const sortedData = data.sort((a, b) => {
-        if (a?.author === id) return -1;
-        if (b?.author === id) return 1;
+        if (a?.authorId === id) return -1;
+        if (b?.authorId === id) return 1;
         return 0;
       });
 
@@ -167,7 +167,7 @@ const Home = () => {
             </div>
           </li>
 
-          {isAuthenticated && id === genre?.author && (
+          {isAuthenticated && id === genre?.authorId && (
             <li className="list-group-item">
               <Button
                 mode="warning"
@@ -179,7 +179,7 @@ const Home = () => {
 
           {isAuthenticated && (
             <>
-              {id === genre?.author || isAdmin ? (
+              {id === genre?.authorId || isAdmin ? (
                 <li className="list-group-item">
                   <Button
                     mode="danger"
