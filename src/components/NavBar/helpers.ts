@@ -1,7 +1,10 @@
 import { PAGES } from "../../constants/navigation";
 import { TABS } from "../../constants/screens";
 
-export const getNavigationDropdownOptions = ({ isAdmin = false }) => {
+export const getNavigationDropdownOptions = ({
+  isAdmin = false,
+  isSuperAdmin = false,
+}) => {
   return [
     {
       title: "Profile",
@@ -14,6 +17,15 @@ export const getNavigationDropdownOptions = ({ isAdmin = false }) => {
             title: "Moderation",
             icon: "circle-check",
             navigateTo: PAGES.ModerationManagement,
+          },
+        ]
+      : []),
+    ...(isSuperAdmin
+      ? [
+          {
+            title: "Users",
+            icon: "users",
+            navigateTo: PAGES.USERS_LISTING,
           },
         ]
       : []),

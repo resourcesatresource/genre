@@ -176,7 +176,7 @@ const ResetPassword = () => {
     }
 
     setValidationToken(token);
-    verifyToken(POST_AUTH_VERIFY_TOKEN, token);
+    verifyToken(POST_AUTH_VERIFY_TOKEN, { token });
   }, [token]);
 
   useEffect(() => {

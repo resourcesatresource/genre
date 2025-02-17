@@ -11,6 +11,7 @@ import Button from "../../ui/button";
 import { ErrorField, STRINGS } from "./helpers";
 import EditModal from "./edit-modal";
 import Portal from "../../ui/styled-component/portal";
+import Icon from "../../ui/icon";
 
 const Home = () => {
   const { id, isAdmin, isAuthenticated } = useAuthContext();
@@ -58,8 +59,8 @@ const Home = () => {
 
     if (data && !error && isArray(data)) {
       const sortedData = data.sort((a, b) => {
-        if (a?.author === id) return -1;
-        if (b?.author === id) return 1;
+        if (a?.authorId === id) return -1;
+        if (b?.authorId === id) return 1;
         return 0;
       });
 
@@ -153,12 +154,20 @@ const Home = () => {
           <li
             className={`list-group-item flex-fill d-flex align-items-center justify-content-${
               isAuthenticated ? "start" : "center"
-            } text-center`}
+            }`}
           >
-            <strong>{genre.name}</strong>
+            <div className={isAuthenticated ? "" : "text-center"}>
+              <strong>{genre.name}</strong>
+              {genre?.authorId && (
+                <div className="d-flex">
+                  <Icon name="user-edit" marginRight="sm"></Icon>
+                  <i>{genre?.authorName ?? "-"}</i>
+                </div>
+              )}
+            </div>
           </li>
 
-          {isAuthenticated && id === genre?.author && (
+          {isAuthenticated && id === genre?.authorId && (
             <li className="list-group-item">
               <Button
                 mode="warning"
@@ -170,7 +179,7 @@ const Home = () => {
 
           {isAuthenticated && (
             <>
-              {id === genre?.author || isAdmin ? (
+              {id === genre?.authorId || isAdmin ? (
                 <li className="list-group-item">
                   <Button
                     mode="danger"
