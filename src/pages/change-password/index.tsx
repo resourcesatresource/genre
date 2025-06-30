@@ -12,6 +12,7 @@ import { useToast } from "../../hooks/use-toast";
 import { t } from "../../services/i18n";
 import { useNavigation } from "../../hooks/use-navigation";
 import { PAGES } from "../../constants/navigation";
+import Card from "../../ui/card";
 
 const ChangePassword = () => {
   const { openToast } = useToast();
@@ -175,38 +176,40 @@ const ChangePassword = () => {
 
   return (
     <PageWrapper>
-      <InputText
-        label={t("change_password.inputs.current_password.label")}
-        value={inputFields.currentPassword}
-        error={errors.currentPassword}
-        onChange={(v) => onInputChange(v, InputFields.currentPassword)}
-        onBlur={() => validateInputFields(InputFields.currentPassword)}
-      ></InputText>
+      <Card padding="lg">
+        <InputText
+          label={t("change_password.inputs.current_password.label")}
+          value={inputFields.currentPassword}
+          error={errors.currentPassword}
+          onChange={(v) => onInputChange(v, InputFields.currentPassword)}
+          onBlur={() => validateInputFields(InputFields.currentPassword)}
+        ></InputText>
 
-      <InputText
-        label={t("change_password.inputs.new_password.label")}
-        value={inputFields.newPassword}
-        error={errors.newPassword}
-        onChange={(v) => onInputChange(v, InputFields.newPassword)}
-        onBlur={() => validateInputFields(InputFields.newPassword)}
-      ></InputText>
+        <InputText
+          label={t("change_password.inputs.new_password.label")}
+          value={inputFields.newPassword}
+          error={errors.newPassword}
+          onChange={(v) => onInputChange(v, InputFields.newPassword)}
+          onBlur={() => validateInputFields(InputFields.newPassword)}
+        ></InputText>
 
-      <InputText
-        label={t("change_password.inputs.confirmed_new_password.label")}
-        value={inputFields.confirmedNewPassword}
-        error={errors.confirmedNewPassword}
-        onChange={(v) => onInputChange(v, InputFields.confirmedNewPassword)}
-        onBlur={() => validateInputFields(InputFields.confirmedNewPassword)}
-      ></InputText>
+        <InputText
+          label={t("change_password.inputs.confirmed_new_password.label")}
+          value={inputFields.confirmedNewPassword}
+          error={errors.confirmedNewPassword}
+          onChange={(v) => onInputChange(v, InputFields.confirmedNewPassword)}
+          onBlur={() => validateInputFields(InputFields.confirmedNewPassword)}
+        ></InputText>
 
-      <Button
-        icon="pen-square"
-        onClick={onChangePassword}
-        isLoading={loading}
-        disabled={loading}
-      >
-        {t("commons.buttons.update.label")}
-      </Button>
+        <Button
+          icon="pen-square"
+          onClick={onChangePassword}
+          isLoading={loading}
+          disabled={loading}
+        >
+          {t("commons.buttons.update.label")}
+        </Button>
+      </Card>
     </PageWrapper>
   );
 };

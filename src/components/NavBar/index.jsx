@@ -11,8 +11,9 @@ import {
   STRINGS,
 } from "./helpers";
 import Icon from "../../ui/icon";
+import configs from "../../configs";
 
-const UserGreeting = ({ userId = "", isAdmin }) => {
+const UserGreeting = ({ userId = "", isAdmin, isSuperAdmin }) => {
   return (
     <div className="container d-flex">
       {userId && (
@@ -29,7 +30,9 @@ const UserGreeting = ({ userId = "", isAdmin }) => {
           )}
         </section>
       )}
-      <Dropdown options={getNavigationDropdownOptions({ isAdmin })} />
+      <Dropdown
+        options={getNavigationDropdownOptions({ isAdmin, isSuperAdmin })}
+      />
     </div>
   );
 };
@@ -51,6 +54,8 @@ function NavBar() {
   const { pathname } = useLocation();
   const { email, isAuthenticated, isAdmin, name } = useAuthContext();
   const [activeTab, setActiveTab] = useState(pathname);
+
+  const isSuperAdmin = email === configs.SUPER_ADMIN_EMAIL;
 
   useEffect(() => {
     if (pathname) {
@@ -87,7 +92,11 @@ function NavBar() {
       </nav>
 
       {isAuthenticated && activeTab === PAGES.HOME && (
-        <UserGreeting userId={name ?? email} isAdmin={isAdmin} />
+        <UserGreeting
+          userId={name ?? email}
+          isAdmin={isAdmin}
+          isSuperAdmin={isSuperAdmin}
+        />
       )}
     </>
   );
