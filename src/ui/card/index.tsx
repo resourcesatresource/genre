@@ -1,8 +1,16 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { useTheme } from "../../theme";
+import { SpacingNames } from "../../theme/typings";
 
-const Card = ({
+const Card: React.FC<{
+  radius?: SpacingNames
+  padding?: SpacingNames
+  marginTop?: SpacingNames
+  marginBottom?: SpacingNames
+  hideShadow?: boolean
+  children?: ReactNode
+}> = ({
   radius = "md",
   padding = "sm",
   marginTop = "md",

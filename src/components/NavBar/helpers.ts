@@ -11,6 +11,11 @@ export const getNavigationDropdownOptions = ({
       icon: "circle-user",
       navigateTo: PAGES.PROFILE,
     },
+    {
+      title: "Connections",
+      icon: "link",
+      navigateTo: PAGES.CONNECTIONS,
+    },
     ...(isAdmin
       ? [
           {

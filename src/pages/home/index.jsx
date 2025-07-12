@@ -168,7 +168,7 @@ const Home = () => {
           </li>
 
           {isAuthenticated && id === genre?.authorId && (
-            <li className="list-group-item">
+            <li className="list-group-item d-flex align-items-center justify-content-center">
               <Button
                 mode="warning"
                 icon="pen-to-square"
@@ -180,16 +180,16 @@ const Home = () => {
           {isAuthenticated && (
             <>
               {id === genre?.authorId || isAdmin ? (
-                <li className="list-group-item">
+                <li className="list-group-item d-flex align-items-center justify-content-center">
                   <Button
                     mode="danger"
+                    icon="trash"
                     onClick={() => handleDelete(genre?._id, genre?.name)}
                     disabled={deleteGenreLoading}
-                    icon="trash"
                   ></Button>
                 </li>
               ) : (
-                <li className="list-group-item">
+                <li className="list-group-item d-flex align-items-center justify-content-center">
                   <Button mode="danger" icon="ban" disabled></Button>
                 </li>
               )}

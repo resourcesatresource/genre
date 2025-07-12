@@ -7,7 +7,12 @@ import {
   POST_ADMIN_REQUEST,
   POST_ADMIN_REQUEST_APPROVAL,
 } from "../../constants/api-endpoints";
-import { ModerationActions, TableField } from "./types";
+import {
+  AdminDetail,
+  ModerationActions,
+  RequesterDetail,
+  TableField,
+} from "./types";
 import PageWrapper from "../../ui/page-wrapper";
 import Table from "../../ui/table";
 import { constructAdminsTableData, constructRequestersList } from "./utils";
@@ -22,14 +27,14 @@ const ModerationApproval = () => {
     error: requesterListError,
     data: requesterList,
     execute: getRequesterList,
-  } = useGet(GET_ADMIN_REQUESTS);
+  } = useGet<RequesterDetail[]>(GET_ADMIN_REQUESTS);
 
   const {
     loading: isAdminListLoading,
     error: adminListError,
     data: adminList,
     execute: getAdminList,
-  } = useGet(GET_ADMIN_LIST);
+  } = useGet<AdminDetail[]>(GET_ADMIN_LIST);
 
   const {
     execute,

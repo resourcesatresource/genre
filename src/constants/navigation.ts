@@ -10,6 +10,7 @@ export const PAGES = {
   ModerationManagement: "/admin/moderation",
   USERS_LISTING: "/admin/users",
   PROFILE: "/me",
+  CONNECTIONS: "/me/connections",
   LOGIN: "/login",
   REGISTER: "/register",
   ADD_GENRE: "/create",
