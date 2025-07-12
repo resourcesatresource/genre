@@ -7,9 +7,10 @@ import ErrorWrapper from "../../components/ErrorWrapper";
 import Icon from "../../ui/icon";
 import { t } from "../../services/i18n";
 import { constructUsersTableData } from "./utils";
+import { User } from "../../types/commons";
 
 const UsersListing = () => {
-  const { loading, error, data } = useGet(GET_USERS);
+  const { loading, error, data } = useGet<User[]>(GET_USERS);
 
   return (
     <PageWrapper isLoading={loading}>
