@@ -21,7 +21,7 @@ export interface CustomerResponse {
 export interface ConnectionFormData {
   name: string;
   url: string;
-  description?: string;
+  description: string;
 }
 
 export enum ConnectionDataField {

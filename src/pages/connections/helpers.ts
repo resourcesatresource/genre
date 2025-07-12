@@ -39,8 +39,14 @@ export const STRINGS = {
       invalid_name: {
         label: "Name should be at least 5 characters long!",
       },
+      empty_url: {
+        label: "Link can't be empty!",
+      },
       invalid_url: {
         label: "Please enter a valid link!",
+      },
+      empty_description: {
+        label: "Description can't be empty!",
       },
     },
   },

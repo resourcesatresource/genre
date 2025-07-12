@@ -22,6 +22,7 @@ const CreateModal: React.FC<EditModalProps> = ({ onSuccess }) => {
   const [formData, setFormData] = useState<ConnectionFormData>({
     name: "",
     url: "",
+    description: "",
   });
   const [errors, setErrors] = useState<ConnectionFormData>({
     name: "",
@@ -55,13 +56,14 @@ const CreateModal: React.FC<EditModalProps> = ({ onSuccess }) => {
     let hasError = false;
 
     if (shouldTrim) {
+      const updatedData = { ...formData };
+
       for (const field of fields) {
-        const val = formData[field as ConnectionDataField]?.trim();
-        setFormData((prev) => ({
-          ...prev,
-          [field]: val,
-        }));
+        const val = updatedData[field as ConnectionDataField]?.trim();
+        updatedData[field as ConnectionDataField] = val;
       }
+
+      setFormData(updatedData);
     }
 
     if (fields.includes(ConnectionDataField.name)) {
@@ -91,11 +93,37 @@ const CreateModal: React.FC<EditModalProps> = ({ onSuccess }) => {
     }
 
     if (fields.includes(ConnectionDataField.url)) {
+      if (!formData.url) {
+        hasError = true;
+        setError(
+          ConnectionDataField.url,
+          STRINGS.create_modal.error.empty_url.label
+        );
+
+        if (returnEarly) {
+          return hasError;
+        }
+      }
+
       if (!isValidUrl(formData.url)) {
         hasError = true;
         setError(
           ConnectionDataField.url,
           STRINGS.create_modal.error.invalid_url.label
+        );
+
+        if (returnEarly) {
+          return hasError;
+        }
+      }
+    }
+
+    if (fields.includes(ConnectionDataField.description)) {
+      if (!formData.description) {
+        hasError = true;
+        setError(
+          ConnectionDataField.description,
+          STRINGS.create_modal.error.empty_description.label
         );
 
         if (returnEarly) {
@@ -214,6 +242,8 @@ const CreateModal: React.FC<EditModalProps> = ({ onSuccess }) => {
         <InputText
           label={STRINGS.create_modal.input.description.label}
           value={formData.description}
+          error={errors.description}
+          onBlur={() => validateFormData([ConnectionDataField.description])}
           onChange={(value) => onChange(ConnectionDataField.description, value)}
         />
         <ErrorView error={error} mode="danger"></ErrorView>

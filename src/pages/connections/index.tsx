@@ -27,6 +27,7 @@ const Connections = () => {
     execute: deleteConnection,
     error: deletionError,
     success: deletionSuccess,
+    loading: isDeleting,
   } = useDelete(DELETE_CONNECTION, {
     lazy: true,
     sendAuthToken: true,
@@ -56,6 +57,7 @@ const Connections = () => {
               mode="danger"
               size="sm"
               icon="trash"
+              disabled={isDeleting}
               onClick={() => handleConnectionDeletion(connection._id)}
             >
               {STRINGS.connections.action.delete.button.label}
