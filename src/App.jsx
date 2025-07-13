@@ -18,6 +18,7 @@ import ChangePassword from "./pages/change-password";
 import ModerationManagement from "./pages/moderation-management";
 import UsersListing from "./pages/users";
 import ResetPassword from "./pages/reset-password";
+import Connections from "./pages/connections";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path={PAGES.ADD_GENRE} element={<CreateGenre />} />
             <Route path={PAGES.PROFILE} element={<Profile />} />
+            <Route path={PAGES.CONNECTIONS} element={<Connections />} />
             <Route path={PAGES.CHANGE_PASSWORD} element={<ChangePassword />} />
             <Route
               path={PAGES.ModerationManagement}

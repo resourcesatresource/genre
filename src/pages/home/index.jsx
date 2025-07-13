@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { isArray } from "lodash";
 
 import { useGet, useDelete } from "../../hooks/use-https";
@@ -12,6 +12,7 @@ import { ErrorField, STRINGS } from "./helpers";
 import EditModal from "./edit-modal";
 import Portal from "../../ui/styled-component/portal";
 import Icon from "../../ui/icon";
+import { CONNECT_URL } from "../../constants";
 
 const Home = () => {
   const { id, isAdmin, isAuthenticated } = useAuthContext();
@@ -161,14 +162,14 @@ const Home = () => {
               {genre?.authorId && (
                 <div className="d-flex">
                   <Icon name="user-edit" marginRight="sm"></Icon>
-                  <i>{genre?.authorName ?? "-"}</i>
+                  <a href={CONNECT_URL+genre.authorId}><i>{genre?.authorName ?? "Visit Profile"}</i></a>
                 </div>
               )}
             </div>
           </li>
 
           {isAuthenticated && id === genre?.authorId && (
-            <li className="list-group-item">
+            <li className="list-group-item d-flex align-items-center justify-content-center">
               <Button
                 mode="warning"
                 icon="pen-to-square"
@@ -180,16 +181,16 @@ const Home = () => {
           {isAuthenticated && (
             <>
               {id === genre?.authorId || isAdmin ? (
-                <li className="list-group-item">
+                <li className="list-group-item d-flex align-items-center justify-content-center">
                   <Button
                     mode="danger"
+                    icon="trash"
                     onClick={() => handleDelete(genre?._id, genre?.name)}
                     disabled={deleteGenreLoading}
-                    icon="trash"
                   ></Button>
                 </li>
               ) : (
-                <li className="list-group-item">
+                <li className="list-group-item d-flex align-items-center justify-content-center">
                   <Button mode="danger" icon="ban" disabled></Button>
                 </li>
               )}

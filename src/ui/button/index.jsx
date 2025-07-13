@@ -10,12 +10,13 @@ const Button = ({
   isLoading = false,
   icon = "",
   children,
+  ...props
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`btn btn-${mode}`}
+      className={`btn btn-${mode} ${props.size ? `btn-${props.size}`: ""}`}
       disabled={disabled}
     >
       <div className="d-flex align-items-center">
