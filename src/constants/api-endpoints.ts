@@ -14,3 +14,6 @@ export const GET_GENRES = "/genres";
 export const POST_GENRES = "/genres";
 export const DELETE_GENRE = "/genres/:id";
 export const PUT_GENRE = "/genres/:id";
+export const GET_CONNECTIONS = "/customers/:id";
+export const PATCH_CONNECTIONS = "/customers/connections";
+export const DELETE_CONNECTION = "/customers/connections/:id";

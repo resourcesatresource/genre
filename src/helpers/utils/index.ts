@@ -15,3 +15,22 @@ export const getFormattedTime = (timestamp: string) => {
   const formattedDate = date.toLocaleString("en-GB", { ...options });
   return formattedDate;
 };
+
+export const isValidUrl = (url: string) => {
+  try {
+    const validatedUrl = new URL(url);
+    return (
+      validatedUrl.protocol === "http:" || validatedUrl.protocol === "https:"
+    );
+  } catch (err) {
+    return false;
+  }
+};
+
+export const setClipboardText = (t: string) => {
+  return navigator.clipboard.writeText(t);
+};
+
+export const getClipboardText = () => {
+  return navigator.clipboard.readText();
+};

@@ -161,7 +161,10 @@ const ChangePassword = () => {
 
   useEffect(() => {
     if (error && errorKind) {
-      setValidationError(ERROR_KIND_MAP[errorKind], error);
+      setValidationError(
+        ERROR_KIND_MAP[errorKind as keyof typeof ERROR_KIND_MAP],
+        error
+      );
     }
 
     if (!error && success) {
