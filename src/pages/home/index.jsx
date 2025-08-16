@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { isArray } from "lodash";
 
 import { useGet, useDelete } from "../../hooks/use-https";
@@ -13,6 +13,7 @@ import EditModal from "./edit-modal";
 import Portal from "../../ui/styled-component/portal";
 import Icon from "../../ui/icon";
 import { CONNECT_URL } from "../../constants";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Home = () => {
   const { id, isAdmin, isAuthenticated } = useAuthContext();
@@ -143,6 +144,14 @@ const Home = () => {
         <Loader isLoading={loading || deleteGenreLoading} />
       </Portal>
 
+      {genres.length === 0 &&
+        Array.from({ length: 10 }).map(() => (
+          <div className="tw:space-x-4 tw:space-y-2 tw:my-2">
+            <Skeleton className="tw:h-4 tw:w-full" />
+            <Skeleton className="tw:h-4 tw:w-[200px]" />
+          </div>
+        ))}
+
       {genres.map((genre) => (
         <ul
           key={genre._id}
@@ -162,7 +171,9 @@ const Home = () => {
               {genre?.authorId && (
                 <div className="d-flex">
                   <Icon name="user-edit" marginRight="sm"></Icon>
-                  <a href={CONNECT_URL+genre.authorId}><i>{genre?.authorName ?? "Visit Profile"}</i></a>
+                  <a href={CONNECT_URL + genre.authorId}>
+                    <i>{genre?.authorName ?? "Visit Profile"}</i>
+                  </a>
                 </div>
               )}
             </div>
