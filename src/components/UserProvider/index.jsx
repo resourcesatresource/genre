@@ -3,29 +3,23 @@ import { useCookies } from "react-cookie";
 
 import { UserContext } from "../../services/user";
 
+const COOKIES_KEYS = ["token", "user", "isAdmin", "_id", "name", "username"];
+
 const UserProvider = ({ children }) => {
-  const [_, setCookies] = useCookies([
-    "token",
-    "user",
-    "isAdmin",
-    "id",
-    "name",
-  ]);
+  const [_, setCookies, removeCookies] = useCookies(COOKIES_KEYS);
 
   const authenticateUser = (userData) => {
-    setCookies("token", userData?.token);
-    setCookies("user", userData?.email);
-    setCookies("isAdmin", userData?.isAdmin);
-    setCookies("id", userData?._id);
-    setCookies("name", userData?.name);
+    COOKIES_KEYS.forEach((key) => {
+      if (userData[key] != undefined || userData[key] != null) {
+        setCookies(key, userData[key], {
+          path: "/",
+        });
+      }
+    });
   };
 
   const logout = () => {
-    setCookies("token", "");
-    setCookies("user", "");
-    setCookies("isAdmin", "");
-    setCookies("id", "");
-    setCookies("name", "");
+    COOKIES_KEYS.forEach((key) => removeCookies(key));
   };
 
   return (

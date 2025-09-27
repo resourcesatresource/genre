@@ -3,6 +3,7 @@ export const POST_AUTH_VERIFY_TOKEN = "/auth/verify-token";
 export const POST_AUTH_REQUEST_RESET_PASSWORD = "/auth/request-reset-password";
 export const POST_AUTH_RESET_PASSWORD = "/auth/reset-password";
 export const POST_USER = "/users";
+export const PATCH_USER = "/users/me";
 export const POST_CHANGE_PASSWORD = "/users/change-password";
 export const GET_USERS = "/users";
 export const GET_ADMIN_LIST = "/users/admins";

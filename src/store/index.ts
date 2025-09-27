@@ -10,7 +10,7 @@ export const useAuthContext = () => {
     name: userContext.name,
     email: userContext.user,
     authToken: userContext.token,
-    id: userContext.id,
+    id: userContext._id,
     isAdmin: userContext.isAdmin === "true",
     isAuthenticated: !!userContext.token,
   };

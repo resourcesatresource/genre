@@ -119,4 +119,31 @@ export default {
       },
     },
   },
+  edit_profile: {
+    inputs: {
+      name: {
+        label: "Name",
+        placeholder: "Enter your name...",
+        errors: {
+          empty: {
+            label: "Name field cannot be empty!",
+          },
+        },
+      },
+      username: {
+        label: "Username",
+        placeholder: "Enter username...",
+        errors: {
+          empty: {
+            label: "Username field cannot be empty!",
+          },
+        },
+      },
+    },
+    toasts: {
+      successful_profile_update: {
+        label: "Profile updated.",
+      },
+    },
+  },
 };

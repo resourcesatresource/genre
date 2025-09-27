@@ -16,4 +16,5 @@ export const PAGES = {
   ADD_GENRE: "/create",
   CHANGE_PASSWORD: "/change-password",
   RESET_PASSWORD: "/reset-password",
+  EDIT_PROFILE: "/me/edit",
 };
