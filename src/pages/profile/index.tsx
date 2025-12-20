@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthContext } from "../../store";
 import AdminRequest from "../../components/actions/admin-request";
 import ErrorView from "../../components/ErrorView";
 import Icon from "../../ui/icon";
-import { DataViewProps } from "./typings";
+import { DataViewProps, VerifiedData } from "./typings";
 import Button from "../../ui/button";
 import { PAGES } from "../../constants/navigation";
 import { t } from "../../services/i18n";
+import { usePost } from "../../hooks/use-https";
+import { POST_AUTH_VERIFY_TOKEN } from "../../constants/api-endpoints";
+import PageWrapper from "../../ui/page-wrapper";
+import { useUser } from "../../services/user";
 
 const DataView: React.FC<DataViewProps> = ({ label, children }) => {
   return (
@@ -20,30 +24,64 @@ const DataView: React.FC<DataViewProps> = ({ label, children }) => {
 };
 
 const Profile = () => {
-  const { email, id, name, isAdmin } = useAuthContext();
+  const { authToken: token } = useAuthContext();
   const navigate = useNavigate();
+  const { authenticateUser } = useUser();
 
   const [adminRequestError, setAdminRequestError] = useState("");
   const [adminRequestSuccess, setAdminRequestSuccess] = useState("");
 
+  const {
+    data: verifiedData,
+    error: verifyTokenError,
+    loading: verifyTokenLoading,
+  } = usePost<VerifiedData>(POST_AUTH_VERIFY_TOKEN, {
+    payload: {
+      token,
+    },
+  });
+
+  useEffect(() => {
+    if (verifyTokenLoading) {
+      return;
+    }
+
+    if (!verifyTokenError && verifiedData) {
+      authenticateUser(verifiedData.user);
+    }
+  }, [verifiedData, verifyTokenError, verifyTokenLoading]);
+
   const profileData = [
     {
       key: "Name",
-      value: name,
+      value: verifiedData?.user.name,
     },
     {
       key: "Email",
-      value: email,
+      value: verifiedData?.user.email,
     },
     {
       key: "User Id",
-      value: id,
+      value: verifiedData?.user._id,
     },
   ];
 
   return (
-    <div className="container my-4">
+    <PageWrapper isLoading={verifyTokenLoading}>
       <>
+        <div className="d-flex justify-content-end bg-info-subtle p-2 rounded-3 mb-2">
+          <Button
+            icon="edit"
+            onClick={() =>
+              navigate(PAGES.EDIT_PROFILE, {
+                state: verifiedData?.user,
+              })
+            }
+            mode="dark"
+          >
+            Edit Profile
+          </Button>
+        </div>
         {profileData.map((attribute, index) => {
           return (
             <DataView key={index} label={attribute.key}>
@@ -52,8 +90,24 @@ const Profile = () => {
           );
         })}
       </>
+
+      <DataView label="Username">
+        {verifiedData?.user.username ? (
+          <div className="d-flex">{verifiedData.user.username}</div>
+        ) : (
+          <Icon
+            name="edit"
+            onClick={() =>
+              navigate(PAGES.EDIT_PROFILE, {
+                state: verifiedData?.user,
+              })
+            }
+          ></Icon>
+        )}
+      </DataView>
+
       <DataView label="Admin">
-        {isAdmin ? (
+        {verifiedData?.user.isAdmin ? (
           <div className="d-flex">
             You are an admin.&nbsp;
             <Icon name="check-circle" />
@@ -77,7 +131,7 @@ const Profile = () => {
 
       <ErrorView mode="danger" error={adminRequestError} />
       <ErrorView error={adminRequestSuccess} />
-    </div>
+    </PageWrapper>
   );
 };
 

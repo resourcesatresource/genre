@@ -8,6 +8,7 @@ const InputText = ({
   required = false,
   onBlur = () => {},
   error = "",
+  placeholder = "",
 }) => {
   return (
     <div className="form-row mb-3">
@@ -24,6 +25,7 @@ const InputText = ({
         value={value}
         className="form-control"
         required={required}
+        placeholder={placeholder}
         onBlur={onBlur}
       />
       {error && <label className="text-danger">{error}</label>}

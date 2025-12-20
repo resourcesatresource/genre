@@ -7,7 +7,7 @@ import { HttpsResponse } from "./typings";
 interface Options {
   lazy?: boolean;
   sendAuthToken?: boolean;
-  payload?: any
+  payload?: any;
 }
 
 type Method = "get" | "delete" | "post" | "put" | "patch";
@@ -87,46 +87,49 @@ const useHttps = <T>(
   const [serverIdle, setServerIdle] = useState(false);
   const { authToken } = useAuthContext();
 
-  const execute = useCallback(async (pathOnExecution?: string, payloadOnExecution?: any) => {
-    setLoading(true);
-    setSuccess(null);
-    setError("");
-    setErrorKind("");
-
-    let serverIdleTimeout = setTimeout(() => {
-      setServerIdle(true);
-    }, 5000);
-
-    try {
-      if (options.sendAuthToken && !authToken) {
-        return;
-      }
-
-      const response = await api[method]<T>(
-        pathOnExecution || path,
-        payloadOnExecution || options?.payload || {},
-        {
-          headers: {
-            "x-auth-token": authToken,
-          },
-        }
-      );
-
-      if (response?.status === 200) {
-        setSuccess(true);
-      }
-
-      setData(response.data);
-    } catch (error: any) {
+  const execute = useCallback(
+    async (pathOnExecution?: string, payloadOnExecution?: any) => {
+      setLoading(true);
       setSuccess(null);
-      setError(error?.response?.data?.message ?? "Something went wrong!!");
-      setErrorKind(error?.response?.data?.id ?? "");
-    } finally {
-      setLoading(false);
-      setServerIdle(false);
-      clearTimeout(serverIdleTimeout);
-    }
-  }, []);
+      setError("");
+      setErrorKind("");
+
+      let serverIdleTimeout = setTimeout(() => {
+        setServerIdle(true);
+      }, 5000);
+
+      try {
+        if (options.sendAuthToken && !authToken) {
+          return;
+        }
+
+        const response = await api[method]<T>(
+          pathOnExecution || path,
+          payloadOnExecution || options?.payload || {},
+          {
+            headers: {
+              "x-auth-token": authToken,
+            },
+          }
+        );
+
+        if (response?.status === 200) {
+          setSuccess(true);
+        }
+
+        setData(response.data);
+      } catch (error: any) {
+        setSuccess(null);
+        setError(error?.response?.data?.message ?? "Something went wrong!!");
+        setErrorKind(error?.response?.data?.id ?? "");
+      } finally {
+        setLoading(false);
+        setServerIdle(false);
+        clearTimeout(serverIdleTimeout);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (!options?.lazy) {
@@ -137,22 +140,37 @@ const useHttps = <T>(
   return { data, loading, error, execute, success, serverIdle, errorKind };
 };
 
-export const useGet = <T>(path: string, options?: Options): HttpsResponse<T> => {
+export const useGet = <T>(
+  path: string,
+  options?: Options
+): HttpsResponse<T> => {
   return useQuery("get", path, options);
 };
 
-export const usePost = <T>(path: string, options?: Options) => {
+export const usePost = <T>(
+  path: string,
+  options?: Options
+): HttpsResponse<T> => {
   return useHttps("post", path, options);
 };
 
-export const usePut = <T>(path: string, options?: Options) => {
+export const usePut = <T>(
+  path: string,
+  options?: Options
+): HttpsResponse<T> => {
   return useHttps("put", path, options);
 };
 
-export const useDelete = <T>(path: string, options?: Options) => {
+export const useDelete = <T>(
+  path: string,
+  options?: Options
+): HttpsResponse<T> => {
   return useQuery("delete", path, options);
 };
 
-export const usePatch = <T>(path: string, options?: Options) => {
-  return useHttps("patch", path, options)
-}
+export const usePatch = <T>(
+  path: string,
+  options?: Options
+): HttpsResponse<T> => {
+  return useHttps("patch", path, options);
+};

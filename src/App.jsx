@@ -19,6 +19,7 @@ import ModerationManagement from "./pages/moderation-management";
 import UsersListing from "./pages/users";
 import ResetPassword from "./pages/reset-password";
 import Connections from "./pages/connections";
+import UpdateProfile from "./pages/update-profile";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               element={<ModerationManagement />}
             />
             <Route path={PAGES.USERS_LISTING} element={<UsersListing />} />
+            <Route path={PAGES.EDIT_PROFILE} element={<UpdateProfile />} />
           </Route>
         </Routes>
       </BrowserRouter>
